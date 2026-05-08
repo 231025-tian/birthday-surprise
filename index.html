@@ -179,9 +179,6 @@
     </style>
 </head>
 <body>
-<audio id="bgMusic" loop preload="auto">
-    <source src="https://docs.google.com/uc?export=download&id=1cV5X9Zt5x8X7xQZ8X7xQZ8X7xQZ8X7xQ" type="audio/mpeg">
-
 
 <div class="container">
     <h1 class="title">✨ 专属生日祝福 ✨</h1>
@@ -262,7 +259,6 @@
             const tab = btn.dataset.tab;
             contents.forEach(c => c.classList.remove('show'));
             document.getElementById('tab'+tab).classList.add('show');
-            document.getElementById('bgMusic').play();
         });
     });
 
