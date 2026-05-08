@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快乐 · 专属惊喜</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0f0ff, #e8e0ff, #d4e5ff);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.85);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 35px rgba(150,130,220,0.15);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 32px;
+            color: #7b68ee;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 12px 22px;
+            border: none;
+            background: #b4c8f0;
+            color: #444;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: #9370db;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fade 0.5s ease;
+            min-height: 420px;
+            padding: 10px;
+        }
+
+        .tab-content.show {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .letter {
+            background: #f5f8ff;
+            padding: 35px;
+            border-radius: 15px;
+            line-height: 2;
+            font-size: 17px;
+            white-space: pre-line;
+            border-left: 5px solid #9370db;
+            color: #333;
+        }
+
+        .message-wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
+        }
+        .message-card {
+            background: linear-gradient(145deg, #f0f5ff, #f3f0ff);
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(147,112,219,0.1);
+        }
+        .msg-name {
+            color: #7b68ee;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .msg-text {
+            color: #555;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .game-box {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .game-box h2 {
+            color: #7b68ee;
+            margin-bottom: 15px;
+        }
+        .game-input {
+            padding: 12px 15px;
+            width: 220px;
+            border: 2px solid #b4c8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            background: #f8faff;
+        }
+        .game-btn {
+            padding: 12px 20px;
+            background: #9370db;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .game-btn:hover {
+            background: #7b68ee;
+        }
+        .secret-msg {
+            margin-top: 25px;
+            font-size: 19px;
+            color: #9370db;
+            display: none;
+            font-weight: 500;
+        }
+
+        .cake-page {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .cake-page h1 {
+            color: #7b68ee;
+            margin-bottom: 15px;
+        }
+        .fireworks {
+            font-size: 22px;
+            margin: 15px 0;
+            letter-spacing: 5px;
+        }
+        .cake-img {
+            width: 240px;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(147,112,219,0.2);
+        }
+        .cake-desc {
+            font-size: 18px;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<audio id="bgMusic" loop preload="auto">
+    <source src="https://docs.google.com/uc?export=download&id=1cV5X9Zt5x8X7xQZ8X7xQZ8X7xQZ8X7xQ" type="audio/mpeg">
+
+
+<div class="container">
+    <h1 class="title">✨ 专属生日祝福 ✨</h1>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="1">给你的信</button>
+        <button class="tab-btn" data-tab="2">留言墙</button>
+        <button class="tab-btn" data-tab="3">密码小游戏</button>
+        <button class="tab-btn" data-tab="4">生日蛋糕</button>
+    </div>
+
+    <div class="tab-content show" id="tab1">
+        <div class="letter">
+提笔写下这些话，只想认真祝你生日快乐。
+
+特意为你做了这个小小的专属网站，
+把心意、温柔和所有想说的话都藏在这里。
+
+认识你之后，很多平凡的日子都变得有了意义。
+希望往后岁岁年年，你永远被温柔以待，
+永远自在明亮，永远保持自己喜欢的模样。
+
+愿清风绕肩，美好常驻，
+而我，会一直在你身旁。
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab2">
+        <div class="message-wall">
+            <div class="message-card">
+                <div class="msg-name">匿名友人</div>
+                <p class="msg-text">生日快乐呀！愿你每天都无忧无虑，被满满的幸福包围。</p>
+            </div>
+            <div class="message-card">
+                <div class="msg-name">好朋友</div>
+                <p class="msg-text">愿你所求皆如愿，所行皆坦途，岁岁平安，年年欢喜。</p>
+            </div>
+            <div class="message-card">
+                <div class="msg-name">知心伙伴</div>
+                <p class="msg-text">新的一岁，愿你颜值在线，好运爆棚，永远温柔且闪闪发光。</p>
+            </div>
+            <div class="message-card">
+                <div class="msg-name">暖心寄语</div>
+                <p class="msg-text">生日喜乐，往后余生，三餐四季，皆是温柔与美好。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab3">
+        <div class="game-box">
+            <h2>解锁专属小惊喜 🔐</h2>
+            <p style="margin:15px 0; color:#666;">输入专属密码，查看隐藏心意</p>
+            <input type="text" class="game-input" id="pwdInput" placeholder="请输入密码">
+            <button class="game-btn" onclick="checkPwd()">立即解锁</button>
+            <div class="secret-msg" id="secret">
+                ✨ 密码正确啦！你永远是我心里最特别的存在 ✨
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab4">
+        <div class="cake-page">
+            <h1>🎂 祝你生日快乐 🎂</h1>
+            <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
+            <img class="cake-img" src="https://picsum.photos/id/291/300/300" alt="生日蛋糕">
+            <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const btns = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            btns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const tab = btn.dataset.tab;
+            contents.forEach(c => c.classList.remove('show'));
+            document.getElementById('tab'+tab).classList.add('show');
+            document.getElementById('bgMusic').play();
+        });
+    });
+
+    function checkPwd() {
+        const pwd = document.getElementById('pwdInput').value.trim();
+        if(pwd === "1880"){
+            document.getElementById('secret').style.display = "block";
+        }else{
+            alert("密码不对哦，再试着猜猜～");
+        }
+    }
+</script>
+
+</body>
+</html>
