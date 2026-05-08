@@ -25,6 +25,8 @@
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 10px 35px rgba(150,130,220,0.15);
+            min-height: 600px;
+            position: relative;
         }
 
         .title {
@@ -35,39 +37,13 @@
             letter-spacing: 2px;
         }
 
-        .tabs {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .tab-btn {
-            padding: 12px 22px;
-            border: none;
-            background: #b4c8f0;
-            color: #444;
-            border-radius: 30px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn.active {
-            background: #9370db;
-            color: #fff;
-            transform: scale(1.05);
-        }
-
-        .tab-content {
+        .page {
             display: none;
             animation: fade 0.5s ease;
             min-height: 420px;
             padding: 10px;
         }
-
-        .tab-content.show {
+        .page.active {
             display: block;
         }
 
@@ -76,6 +52,26 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .nav-btn {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .nav-btn button {
+            padding: 12px 30px;
+            background: #9370db;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: 0.3s;
+        }
+        .nav-btn button:hover {
+            background: #7b68ee;
+        }
+
+        /* 信纸 */
         .letter {
             background: #f5f8ff;
             padding: 35px;
@@ -87,6 +83,49 @@
             color: #333;
         }
 
+        /* 时间轴样式 */
+        .timeline {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+            padding-left: 30px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #b4c8f0;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 25px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 6px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #9370db;
+        }
+        .time-date {
+            color: #7b68ee;
+            font-weight: bold;
+            font-size: 17px;
+            margin-bottom: 6px;
+        }
+        .time-text {
+            color: #555;
+            line-height: 1.7;
+        }
+
+        /* 留言墙 */
         .message-wall {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -110,6 +149,7 @@
             font-size: 15px;
         }
 
+        /* 密码游戏 */
         .game-box {
             text-align: center;
             padding: 50px 20px;
@@ -137,9 +177,6 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .game-btn:hover {
-            background: #7b68ee;
-        }
         .secret-msg {
             margin-top: 25px;
             font-size: 19px;
@@ -148,6 +185,7 @@
             font-weight: 500;
         }
 
+        /* 生日蛋糕 */
         .cake-page {
             text-align: center;
             padding: 40px 20px;
@@ -172,41 +210,25 @@
             color: #666;
             margin-top: 15px;
         }
-
-        audio {
-            display: none;
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 class="title">✨ 专属生日祝福 ✨</h1>
+    <h1 class="title">✨ 专属生日惊喜 ✨</h1>
 
-    <div class="tabs">
-        <button class="tab-btn active" data-tab="1">给你的信</button>
-        <button class="tab-btn" data-tab="2">留言墙</button>
-        <button class="tab-btn" data-tab="3">密码小游戏</button>
-        <button class="tab-btn" data-tab="4">生日蛋糕</button>
-    </div>
-
-    <div class="tab-content show" id="tab1">
-        <div class="letter">
-提笔写下这些话，只想认真祝你生日快乐。
-
-特意为你做了这个小小的专属网站，
-把心意、温柔和所有想说的话都藏在这里。
-
-认识你之后，很多平凡的日子都变得有了意义。
-希望往后岁岁年年，你永远被温柔以待，
-永远自在明亮，永远保持自己喜欢的模样。
-
-愿清风绕肩，美好常驻，
-而我，会一直在你身旁。
+    <!-- 第1页：生日蛋糕 -->
+    <div class="page active" id="page1">
+        <div class="cake-page">
+            <h1>🎂 祝你生日快乐 🎂</h1>
+            <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
+            <img class="cake-img" src="https://picsum.photos/id/291/300/300" alt="生日蛋糕">
+            <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
         </div>
     </div>
 
-    <div class="tab-content" id="tab2">
+    <!-- 第2页：留言墙 -->
+    <div class="page" id="page2">
         <div class="message-wall">
             <div class="message-card">
                 <div class="msg-name">匿名友人</div>
@@ -227,7 +249,30 @@
         </div>
     </div>
 
-    <div class="tab-content" id="tab3">
+    <!-- 第3页：相识时间轴 -->
+    <div class="page" id="page3">
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time-date">某年某月某日</div>
+                <div class="time-text">我们初次相遇，故事从这一刻悄悄开始。</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-date">往后的日子</div>
+                <div class="time-text">慢慢熟悉，慢慢了解，慢慢走进彼此的生活。</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-date">每一个平凡日常</div>
+                <div class="time-text">因为有你，都变得温柔又闪闪发光。</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-date">今年生日</div>
+                <div class="time-text">愿往后岁岁年年，我都可以陪在你身边。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第4页：密码游戏 -->
+    <div class="page" id="page4">
         <div class="game-box">
             <h2>解锁专属小惊喜 🔐</h2>
             <p style="margin:15px 0; color:#666;">输入专属密码，查看隐藏心意</p>
@@ -239,27 +284,67 @@
         </div>
     </div>
 
-    <div class="tab-content" id="tab4">
-        <div class="cake-page">
-            <h1>🎂 祝你生日快乐 🎂</h1>
-            <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
-            <img class="cake-img" src="https://picsum.photos/id/291/300/300" alt="生日蛋糕">
-            <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
+    <!-- 第5页：给你的信 -->
+    <div class="page" id="page5">
+        <div class="letter">
+提笔写下这些话，只想认真祝你生日快乐。
+
+特意为你做了这个小小的专属网站，
+把心意、温柔和所有想说的话都藏在这里。
+
+认识你之后，很多平凡的日子都变得有了意义。
+希望往后岁岁年年，你永远被温柔以待，
+永远自在明亮，永远保持自己喜欢的模样。
+
+愿清风绕肩，美好常驻，
+而我，会一直在你身旁。
         </div>
+    </div>
+
+    <!-- 上下页按钮 -->
+    <div class="nav-btn">
+        <button id="prevBtn" style="display:none;">上一页</button>
+        <button id="nextBtn">下一页</button>
     </div>
 </div>
 
 <script>
-    const btns = document.querySelectorAll('.tab-btn');
-    const contents = document.querySelectorAll('.tab-content');
-    btns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            btns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const tab = btn.dataset.tab;
-            contents.forEach(c => c.classList.remove('show'));
-            document.getElementById('tab'+tab).classList.add('show');
+    let currentPage = 1;
+    const totalPage = 5;
+
+    function showPage(num){
+        document.querySelectorAll('.page').forEach(item=>{
+            item.classList.remove('active');
         });
+        document.getElementById('page'+num).classList.add('active');
+
+        if(num === 1){
+            document.getElementById('prevBtn').style.display = 'none';
+        }else{
+            document.getElementById('prevBtn').style.display = 'inline-block';
+        }
+
+        if(num === totalPage){
+            document.getElementById('nextBtn').innerText = '已到最后一页';
+            document.getElementById('nextBtn').disabled = true;
+        }else{
+            document.getElementById('nextBtn').innerText = '下一页';
+            document.getElementById('nextBtn').disabled = false;
+        }
+    }
+
+    document.getElementById('nextBtn').addEventListener('click',()=>{
+        if(currentPage < totalPage){
+            currentPage++;
+            showPage(currentPage);
+        }
+    });
+
+    document.getElementById('prevBtn').addEventListener('click',()=>{
+        if(currentPage > 1){
+            currentPage--;
+            showPage(currentPage);
+        }
     });
 
     function checkPwd() {
