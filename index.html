@@ -33,27 +33,29 @@
             letter-spacing: 2px;
         }
 
-        .page {
-            display: none;
-            animation: fade 0.5s ease;
-            min-height: 520px;
-            padding: 30px 20px;
-            border-radius: 20px;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
+.page {
+    display: none;
+    animation: fade 0.5s ease;
+    min-height: 520px;
+    padding: 30px 20px;
+    border-radius: 20px;
+
+    /* 铺满不留白 专属配置 */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
         .page.active {
             display: block;
         }
 
         /* 5个页面 独立稳定背景图 可直接在GitHub显示 */
-        #page1 {background-image: url("./bg1.jpg");}
-        #page2 {background-image: url("./bg2.jpg");}
-        #page3 {background-image: url("./bg3.jpg"); }
-        #page4 { background-image: url("./bg4.jpg"); }
-        #page5 { background-image: url("./bg5.jpg"); }
+        #page1 {background-image: url(/231025-tian/birthday-surprise/edit/main/"./bg1.jpg");}
+        #page2 {background-image: url(/231025-tian/birthday-surprise/edit/main/"./bg2.jpg");}
+        #page3 {background-image: url(/231025-tian/birthday-surprise/edit/main/"./bg3.jpg"); }
+        #page4 { background-image: url(/231025-tian/birthday-surprise/edit/main/"./bg4.jpg"); }
+        #page5 { background-image: url(/231025-tian/birthday-surprise/edit/main/"./bg5.jpg"); }
 
         @keyframes fade {
             from { opacity: 0; transform: translateY(10px); }
