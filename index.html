@@ -70,6 +70,10 @@
         .nav-btn button:hover {
             background: #7b68ee;
         }
+        .nav-btn button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
 
         /* 信纸 */
         .letter {
@@ -177,12 +181,16 @@
             cursor: pointer;
             transition: 0.3s;
         }
+        .game-btn:hover {
+            background: #7b68ee;
+        }
         .secret-msg {
             margin-top: 25px;
             font-size: 19px;
             color: #9370db;
             display: none;
             font-weight: 500;
+            animation: fade 0.5s ease;
         }
 
         /* 生日蛋糕 */
@@ -199,13 +207,18 @@
             margin: 15px 0;
             letter-spacing: 5px;
         }
-.cake-img {
-    width: 380px;  /* 调大尺寸，可改400px/450px */
-    margin: 20px auto;
-    border-radius: 15px;
-    box-shadow: 0 6px 20px rgba(147,112,219,0.2);
-    display: block;
-}
+        .cake-img {
+            width: 380px;
+            max-width: 100%;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(147,112,219,0.2);
+            display: block;
+        }
+        .cake-fallback {
+            font-size: 120px;
+            margin: 20px 0;
+        }
         .cake-desc {
             font-size: 18px;
             color: #666;
@@ -218,12 +231,15 @@
 <div class="container">
     <h1 class="title">✨ 专属生日惊喜 ✨</h1>
 
-    <!-- 第1页：生日蛋糕（已修复图片显示问题） -->
+    <!-- 第1页：生日蛋糕 -->
     <div class="page active" id="page1">
         <div class="cake-page">
             <h1>🎂 祝你生日快乐 🎂</h1>
             <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
-            <img class="cake-img" src="./cake.jpg" alt="生日蛋糕">
+            
+            <img class="cake-img" src="./cake.jpg" alt="生日蛋糕" onError="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
+            <div id="cakeFallback" class="cake-fallback" style="display:none;">🎂</div>
+            
             <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
         </div>
     </div>
