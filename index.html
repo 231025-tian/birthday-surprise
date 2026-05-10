@@ -13,14 +13,18 @@
         }
 
         body {
+            background: linear-gradient(135deg, #e0f0ff, #e8e0ff, #d4e5ff);
             min-height: 100vh;
             padding: 20px;
-            background: #f0f4f8;
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
+            background: rgba(255,255,255,0.85);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 35px rgba(150,130,220,0.15);
             min-height: 600px;
             position: relative;
         }
@@ -28,7 +32,7 @@
         .title {
             text-align: center;
             font-size: 32px;
-            color: #5c4b99;
+            color: #7b68ee;
             margin-bottom: 30px;
             letter-spacing: 2px;
         }
@@ -36,23 +40,12 @@
         .page {
             display: none;
             animation: fade 0.5s ease;
-            min-height: 520px;
-            padding: 30px 20px;
-            border-radius: 20px;
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
+            min-height: 420px;
+            padding: 10px;
         }
         .page.active {
             display: block;
         }
-
-        /* 背景图路径和你的文件名完全对应 */
-        #page1 { background-image: url("./bg1.jpg"); }
-        #page2 { background-image: url("./bg2.jpg"); }
-        #page3 { background-image: url("./bg3.jpg"); }
-        #page4 { background-image: url("./bg4.jpg"); }
-        #page5 { background-image: url("./bg5.jpg"); }
 
         @keyframes fade {
             from { opacity: 0; transform: translateY(10px); }
@@ -72,76 +65,151 @@
             font-size: 16px;
             cursor: pointer;
             margin: 0 10px;
+            transition: 0.3s;
+        }
+        .nav-btn button:hover {
+            background: #7b68ee;
         }
 
-        /* 半透明白色卡片，保证文字清晰 */
-        .card {
-            background: rgba(255,255,255,0.88);
-            padding: 25px;
-            border-radius: 18px;
-        }
-
-        /* 信纸样式 */
+        /* 信纸 */
         .letter {
+            background: #f5f8ff;
+            padding: 35px;
+            border-radius: 15px;
             line-height: 2;
             font-size: 17px;
-            color: #333;
             white-space: pre-line;
+            border-left: 5px solid #9370db;
+            color: #333;
         }
 
-        /* 时间轴 */
+        /* 时间轴样式 */
+        .timeline {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+            padding-left: 30px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #b4c8f0;
+        }
         .timeline-item {
-            margin-bottom: 20px;
-            padding:15px;
-            border-radius:10px;
-            background: rgba(255,255,255,0.9);
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 25px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 6px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #9370db;
         }
         .time-date {
             color: #7b68ee;
             font-weight: bold;
+            font-size: 17px;
             margin-bottom: 6px;
+        }
+        .time-text {
+            color: #555;
+            line-height: 1.7;
         }
 
         /* 留言墙 */
         .message-wall {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
         }
         .message-card {
-            background: rgba(255,255,255,0.9);
-            padding: 18px;
+            background: linear-gradient(145deg, #f0f5ff, #f3f0ff);
+            padding: 22px;
             border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(147,112,219,0.1);
+        }
+        .msg-name {
+            color: #7b68ee;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .msg-text {
+            color: #555;
+            line-height: 1.7;
+            font-size: 15px;
         }
 
-        /* 密码页 */
+        /* 密码游戏 */
         .game-box {
             text-align: center;
-            padding: 40px 20px;
-            background: rgba(255,255,255,0.9);
-            border-radius:15px;
+            padding: 50px 20px;
+        }
+        .game-box h2 {
+            color: #7b68ee;
+            margin-bottom: 15px;
         }
         .game-input {
-            padding: 12px;
+            padding: 12px 15px;
             width: 220px;
-            border: 2px solid #ccd6f0;
+            border: 2px solid #b4c8f0;
             border-radius: 10px;
             font-size: 16px;
-            margin-right:10px;
+            outline: none;
+            background: #f8faff;
+        }
+        .game-btn {
+            padding: 12px 20px;
+            background: #9370db;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: 0.3s;
         }
         .secret-msg {
             margin-top: 25px;
             font-size: 19px;
             color: #9370db;
             display: none;
+            font-weight: 500;
         }
 
-        /* 蛋糕图样式 */
+        /* 生日蛋糕 */
+        .cake-page {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .cake-page h1 {
+            color: #7b68ee;
+            margin-bottom: 15px;
+        }
+        .fireworks {
+            font-size: 22px;
+            margin: 15px 0;
+            letter-spacing: 5px;
+        }
         .cake-img {
-            width: 380px;
+            width: 280px;
             margin: 20px auto;
             border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(147,112,219,0.2);
             display: block;
+        }
+        .cake-desc {
+            font-size: 18px;
+            color: #666;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -150,13 +218,13 @@
 <div class="container">
     <h1 class="title">✨ 专属生日惊喜 ✨</h1>
 
-    <!-- 第1页：生日蛋糕 -->
+    <!-- 第1页：生日蛋糕（已修复图片显示问题） -->
     <div class="page active" id="page1">
-        <div class="card" style="text-align:center;">
+        <div class="cake-page">
             <h1>🎂 祝你生日快乐 🎂</h1>
-            <div class="fireworks" style="margin:15px 0;font-size:22px;">🎆 🎉 🎈 ✨ 🎊 💜</div>
-            <img class="cake-img" src="./cake.jpg" alt="生日蛋糕">
-            <p style="font-size:18px;color:#666;margin-top:15px;">愿所有温柔与惊喜，都如期奔赴于你</p>
+            <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
+            <img class="cake-img" src="https://picsum.photos/id/291/300/300" alt="生日蛋糕">
+            <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
         </div>
     </div>
 
@@ -164,41 +232,43 @@
     <div class="page" id="page2">
         <div class="message-wall">
             <div class="message-card">
-                <div style="color:#7b68ee;font-weight:bold;margin-bottom:8px;">匿名友人</div>
-                <p style="color:#555;line-height:1.7;">生日快乐呀！愿你每天都无忧无虑，被满满的幸福包围。</p>
+                <div class="msg-name">匿名友人</div>
+                <p class="msg-text">生日快乐呀！愿你每天都无忧无虑，被满满的幸福包围。</p>
             </div>
             <div class="message-card">
-                <div style="color:#7b68ee;font-weight:bold;margin-bottom:8px;">好朋友</div>
-                <p style="color:#555;line-height:1.7;">愿你所求皆如愿，所行皆坦途，岁岁平安，年年欢喜。</p>
+                <div class="msg-name">好朋友</div>
+                <p class="msg-text">愿你所求皆如愿，所行皆坦途，岁岁平安，年年欢喜。</p>
             </div>
             <div class="message-card">
-                <div style="color:#7b68ee;font-weight:bold;margin-bottom:8px;">知心伙伴</div>
-                <p style="color:#555;line-height:1.7;">新的一岁，愿你颜值在线，好运爆棚，永远温柔且闪闪发光。</p>
+                <div class="msg-name">知心伙伴</div>
+                <p class="msg-text">新的一岁，愿你颜值在线，好运爆棚，永远温柔且闪闪发光。</p>
             </div>
             <div class="message-card">
-                <div style="color:#7b68ee;font-weight:bold;margin-bottom:8px;">暖心寄语</div>
-                <p style="color:#555;line-height:1.7;">生日喜乐，往后余生，三餐四季，皆是温柔与美好。</p>
+                <div class="msg-name">暖心寄语</div>
+                <p class="msg-text">生日喜乐，往后余生，三餐四季，皆是温柔与美好。</p>
             </div>
         </div>
     </div>
 
     <!-- 第3页：相识时间轴 -->
     <div class="page" id="page3">
-        <div class="timeline-item">
-            <div class="time-date">某年某月某日</div>
-            <p style="color:#555;">我们初次相遇，故事从这一刻悄悄开始。</p>
-        </div>
-        <div class="timeline-item">
-            <div class="time-date">往后的日子</div>
-            <p style="color:#555;">慢慢熟悉，慢慢了解，慢慢走进彼此的生活。</p>
-        </div>
-        <div class="timeline-item">
-            <div class="time-date">每一个平凡日常</div>
-            <p style="color:#555;">因为有你，都变得温柔又闪闪发光。</p>
-        </div>
-        <div class="timeline-item">
-            <div class="time-date">今年生日</div>
-            <p style="color:#555;">愿往后岁岁年年，我都可以陪在你身边。</p>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time-date">某年某月某日</div>
+                <div class="time-text">我们初次相遇，故事从这一刻悄悄开始。</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-date">往后的日子</div>
+                <div class="time-text">慢慢熟悉，慢慢了解，慢慢走进彼此的生活。</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-date">每一个平凡日常</div>
+                <div class="time-text">因为有你，都变得温柔又闪闪发光。</div>
+            </div>
+            <div class="timeline-item">
+                <div class="time-date">今年生日</div>
+                <div class="time-text">愿往后岁岁年年，我都可以陪在你身边。</div>
+            </div>
         </div>
     </div>
 
@@ -206,17 +276,18 @@
     <div class="page" id="page4">
         <div class="game-box">
             <h2>解锁专属小惊喜 🔐</h2>
-            <p style="margin:15px 0;color:#666;">输入专属密码，查看隐藏心意</p>
+            <p style="margin:15px 0; color:#666;">输入专属密码，查看隐藏心意</p>
             <input type="text" class="game-input" id="pwdInput" placeholder="请输入密码">
-            <button onclick="checkPwd()">立即解锁</button>
-            <div class="secret-msg" id="secret">✨ 密码正确啦！你永远是我心里最特别的存在 ✨</div>
+            <button class="game-btn" onclick="checkPwd()">立即解锁</button>
+            <div class="secret-msg" id="secret">
+                ✨ 密码正确啦！你永远是我心里最特别的存在 ✨
+            </div>
         </div>
     </div>
 
     <!-- 第5页：给你的信 -->
     <div class="page" id="page5">
-        <div class="card">
-            <div class="letter">
+        <div class="letter">
 提笔写下这些话，只想认真祝你生日快乐。
 
 特意为你做了这个小小的专属网站，
@@ -228,7 +299,6 @@
 
 愿清风绕肩，美好常驻，
 而我，会一直在你身旁。
-            </div>
         </div>
     </div>
 
@@ -249,7 +319,12 @@
         });
         document.getElementById('page'+num).classList.add('active');
 
-        document.getElementById('prevBtn').style.display = num===1 ? 'none' : 'inline-block';
+        if(num === 1){
+            document.getElementById('prevBtn').style.display = 'none';
+        }else{
+            document.getElementById('prevBtn').style.display = 'inline-block';
+        }
+
         if(num === totalPage){
             document.getElementById('nextBtn').innerText = '已到最后一页';
             document.getElementById('nextBtn').disabled = true;
@@ -274,7 +349,7 @@
     });
 
     function checkPwd() {
-        let pwd = document.getElementById('pwdInput').value.trim();
+        const pwd = document.getElementById('pwdInput').value.trim();
         if(pwd === "1880"){
             document.getElementById('secret').style.display = "block";
         }else{
