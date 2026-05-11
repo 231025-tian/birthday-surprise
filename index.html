@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快乐 · 专属惊喜</title>
+    <!-- 修复字体链接，GitHub 可正常加载 -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
     <style>
         * {
@@ -15,7 +16,6 @@
 
         body {
             min-height: 100vh;
-            /* 默认背景，防止加载前空白 */
             background: #e0f0ff;
             background-size: cover;
             background-position: center;
@@ -60,7 +60,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 内容容器半透白底，不挡住背景图 */
         .page-content {
             background: rgba(255,255,255,0.85);
             border-radius: 20px;
@@ -93,7 +92,6 @@
             cursor: not-allowed;
         }
 
-        /* 信纸 */
         .letter {
             background: #f5f8ff;
             padding: 35px;
@@ -105,7 +103,6 @@
             color: #333;
         }
 
-        /* 时间轴样式 */
         .timeline {
             position: relative;
             max-width: 700px;
@@ -147,7 +144,6 @@
             line-height: 1.7;
         }
 
-        /* 留言墙 */
         .message-wall {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -171,7 +167,6 @@
             font-size: 15px;
         }
 
-        /* 密码游戏 */
         .game-box {
             text-align: center;
             padding: 50px 20px;
@@ -213,7 +208,6 @@
             animation: fade 0.5s ease;
         }
 
-        /* 生日蛋糕 放大版图片 */
         .cake-page {
             text-align: center;
             padding: 40px 20px;
@@ -238,6 +232,7 @@
         .cake-fallback {
             font-size: 120px;
             margin: 20px 0;
+            display: none;
         }
         .cake-desc {
             font-size: 18px;
@@ -251,22 +246,21 @@
 <div class="container">
     <h1 class="title">✨ 专属生日惊喜 ✨</h1>
 
-    <!-- 第1页：生日蛋糕 -->
     <div class="page active" id="page1">
         <div class="page-content">
             <div class="cake-page">
                 <h1>🎂 祝你生日快乐 🎂</h1>
                 <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
                 
-                <img class="cake-img" src="./cake.jpg" alt="生日蛋糕" onError="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
-                <div id="cakeFallback" class="cake-fallback" style="display:none;">🎂</div>
+                <img class="cake-img" src="cake.jpg" alt="生日蛋糕" 
+                     onError="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
+                <div id="cakeFallback" class="cake-fallback">🎂</div>
                 
                 <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
             </div>
         </div>
     </div>
 
-    <!-- 第2页：留言墙 -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="message-wall">
@@ -290,7 +284,6 @@
         </div>
     </div>
 
-    <!-- 第3页：相识时间轴 -->
     <div class="page" id="page3">
         <div class="page-content">
             <div class="timeline">
@@ -314,7 +307,6 @@
         </div>
     </div>
 
-    <!-- 第4页：密码游戏 -->
     <div class="page" id="page4">
         <div class="page-content">
             <div class="game-box">
@@ -329,7 +321,6 @@
         </div>
     </div>
 
-    <!-- 第5页：给你的信 -->
     <div class="page" id="page5">
         <div class="page-content">
             <div class="letter">
@@ -348,7 +339,6 @@
         </div>
     </div>
 
-    <!-- 上下页按钮 -->
     <div class="nav-btn">
         <button id="prevBtn" style="display:none;">上一页</button>
         <button id="nextBtn">下一页</button>
@@ -358,18 +348,16 @@
 <script>
     let currentPage = 1;
     const totalPage = 5;
-    const repoName = "birthday-surprise"; // 你的仓库名
 
-    // 每页对应的背景图路径
+    // GitHub Pages 根目录直接用文件名即可
     const backgrounds = [
-        `/${repoName}/bg1.jpg`,
-        `/${repoName}/bg2.jpg`,
-        `/${repoName}/bg3.jpg`,
-        `/${repoName}/bg4.jpg`,
-        `/${repoName}/bg5.jpg`
+        "bg1.jpg",
+        "bg2.jpg",
+        "bg3.jpg",
+        "bg4.jpg",
+        "bg5.jpg"
     ];
 
-    // 切换背景图
     function setBackground(pageNum) {
         document.body.style.backgroundImage = `url(${backgrounds[pageNum - 1]})`;
     }
@@ -380,21 +368,17 @@
         });
         document.getElementById('page'+num).classList.add('active');
 
-        // 切换背景
         setBackground(num);
 
-        if(num === 1){
-            document.getElementById('prevBtn').style.display = 'none';
-        }else{
-            document.getElementById('prevBtn').style.display = 'inline-block';
-        }
-
+        document.getElementById('prevBtn').style.display = num === 1 ? 'none' : 'inline-block';
+        
+        const nextBtn = document.getElementById('nextBtn');
         if(num === totalPage){
-            document.getElementById('nextBtn').innerText = '已到最后一页';
-            document.getElementById('nextBtn').disabled = true;
+            nextBtn.innerText = '已到最后一页';
+            nextBtn.disabled = true;
         }else{
-            document.getElementById('nextBtn').innerText = '下一页';
-            document.getElementById('nextBtn').disabled = false;
+            nextBtn.innerText = '下一页';
+            nextBtn.disabled = false;
         }
     }
 
@@ -421,7 +405,7 @@
         }
     }
 
-    // 初始加载背景
+    // 初始加载第一页背景
     setBackground(currentPage);
 </script>
 
