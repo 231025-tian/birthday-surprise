@@ -60,13 +60,14 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .page-content {
-            background: rgba(255,255,255,0.85);
-            border-radius: 20px;
-            padding: 25px;
-            min-height: 480px;
-            box-shadow: 0 10px 35px rgba(150,130,220,0.15);
-        }
+       .page-content {
+    background: rgba(255,255,255,0.5); /* 调低透明度 */
+    border-radius: 20px;
+    padding: 25px;
+    min-height: 480px;
+    box-shadow: 0 10px 35px rgba(150,130,220,0.15);
+    backdrop-filter: blur(8px); /* 毛玻璃效果，背景会被模糊 */
+}
 
         .nav-btn {
             margin-top: 20px;
