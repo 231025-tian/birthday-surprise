@@ -60,13 +60,16 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-       .page-content {
-    background: rgba(255,255,255,0.5); /* 调低透明度 */
+      .page-content {
+    background: transparent; /* 去掉白色背景 */
     border-radius: 20px;
     padding: 25px;
     min-height: 480px;
-    box-shadow: 0 10px 35px rgba(150,130,220,0.15);
-    backdrop-filter: blur(8px); /* 毛玻璃效果，背景会被模糊 */
+}
+
+/* 给所有文字加阴影，提升可读性 */
+.time-text, .msg-text, .letter, .cake-desc, .game-box p {
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
         .nav-btn {
