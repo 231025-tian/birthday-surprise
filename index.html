@@ -16,12 +16,12 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #e0f0ff, #f3e5ff);
+            background: #e0f0ff;
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            transition: background 0.8s ease;
-            padding: 15px;
+            transition: background 0.5s ease;
+            padding: 20px;
         }
 
         .container {
@@ -34,51 +34,43 @@
             text-align: center;
             font-size: 38px;
             color: #7b68ee;
-            margin: 20px 0 30px;
+            margin-bottom: 30px;
             letter-spacing: 2px;
-            background: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.75);
             display: inline-block;
-            padding: 10px 26px;
+            padding: 8px 24px;
             border-radius: 30px;
             position: relative;
             left: 50%;
             transform: translateX(-50%);
-            box-shadow: 0 4px 15px rgba(123,104,238,0.15);
-            animation: breathe 3s infinite ease-in-out;
-        }
-
-        @keyframes breathe {
-            0% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.02); }
-            100% { transform: translateX(-50%) scale(1); }
         }
 
         .page {
             display: none;
-            animation: fade 0.6s ease forwards;
+            animation: fade 0.5s ease;
             min-height: 600px;
-            padding: 15px;
+            padding: 30px;
         }
         .page.active {
             display: block;
         }
 
         @keyframes fade {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .page-content {
-            background: rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.6);
             border-radius: 20px;
             padding: 25px;
             min-height: 480px;
             box-shadow: 0 10px 35px rgba(150,130,220,0.15);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(6px);
         }
 
         .nav-btn {
-            margin-top: 25px;
+            margin-top: 20px;
             text-align: center;
         }
         .nav-btn button {
@@ -90,23 +82,19 @@
             font-size: 17px;
             cursor: pointer;
             margin: 0 10px;
-            transition: all 0.3s;
-            box-shadow: 0 3px 10px rgba(147,112,219,0.2);
+            transition: 0.3s;
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .nav-btn button:hover {
             background: #7b68ee;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(123,104,238,0.3);
         }
         .nav-btn button:disabled {
             background: #ccc;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
 
         .back-btn {
-            margin-top: 25px;
+            margin-top: 20px;
             text-align: center;
         }
         .back-btn button {
@@ -117,22 +105,18 @@
             border-radius: 25px;
             cursor: pointer;
             font-size: 16px;
-            transition: 0.3s;
-        }
-        .back-btn button:hover {
-            background: #9cb6e3;
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
 
         .letter {
-            background: #f8fbff;
+            background: #f5f8ff;
             padding: 35px;
             border-radius: 15px;
-            line-height: 2.3;
+            line-height: 2.2;
             font-size: 18px;
             white-space: pre-line;
             border-left: 5px solid #9370db;
             color: #333;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
         .timeline {
@@ -164,7 +148,6 @@
             height: 16px;
             border-radius: 50%;
             background: #9370db;
-            box-shadow: 0 0 0 4px rgba(147,112,219,0.2);
         }
         .time-date {
             color: #7b68ee;
@@ -188,11 +171,6 @@
             padding: 22px;
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(147,112,219,0.1);
-            transition: 0.3s;
-        }
-        .message-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(147,112,219,0.15);
         }
         .msg-name {
             color: #7b68ee;
@@ -223,11 +201,7 @@
             font-size: 17px;
             outline: none;
             background: #f8faff;
-            transition: 0.3s;
-        }
-        .game-input:focus {
-            border-color: #9370db;
-            box-shadow: 0 0 0 3px rgba(147,112,219,0.1);
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .game-btn {
             padding: 12px 22px;
@@ -239,10 +213,10 @@
             cursor: pointer;
             transition: 0.3s;
             font-size: 17px;
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .game-btn:hover {
             background: #7b68ee;
-            transform: translateY(-2px);
         }
         .secret-msg {
             margin-top: 25px;
@@ -251,7 +225,6 @@
             display: none;
             font-weight: 500;
             animation: fade 0.5s ease;
-            text-shadow: 0 1px 3px rgba(147,112,219,0.2);
         }
 
         .cake-page {
@@ -264,14 +237,9 @@
             font-size: 28px;
         }
         .fireworks {
-            font-size: 26px;
-            margin: 20px 0;
-            letter-spacing: 8px;
-            animation: sparkle 1.5s infinite alternate;
-        }
-        @keyframes sparkle {
-            0% { opacity: 0.8; transform: scale(1); }
-            100% { opacity: 1; transform: scale(1.05); }
+            font-size: 24px;
+            margin: 15px 0;
+            letter-spacing: 5px;
         }
         .cake-img {
             width: 550px;
@@ -280,17 +248,11 @@
             border-radius: 15px;
             box-shadow: 0 6px 20px rgba(147,112,219,0.2);
             display: block;
-            object-fit: cover;
         }
         .cake-fallback {
             font-size: 130px;
-            margin: 30px 0;
+            margin: 20px 0;
             display: none;
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%,100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
         }
         .cake-desc {
             font-size: 19px;
@@ -316,13 +278,12 @@
             border-radius: 30px;
             margin: 15px;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(147,112,219,0.2);
+            transition: 0.3s;
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .choose-btn:hover {
             background: #7b68ee;
-            transform: scale(1.05) translateY(-3px);
-            box-shadow: 0 8px 20px rgba(123,104,238,0.3);
+            transform: scale(1.05);
         }
 
         .friend-page {
@@ -347,12 +308,7 @@
             border-radius: 12px;
             font-size: 17px;
             outline: none;
-            transition: 0.3s;
-        }
-        .input-group input:focus,
-        .input-group textarea:focus {
-            border-color: #9370db;
-            box-shadow: 0 0 0 3px rgba(147,112,219,0.1);
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .input-group textarea {
             min-height: 120px;
@@ -367,11 +323,13 @@
             font-size: 18px;
             cursor: pointer;
             margin-top: 10px;
-            transition: 0.3s;
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
-        .submit-btn:hover {
-            background: #7b68ee;
-            transform: translateY(-2px);
+        .loading {
+            text-align: center;
+            color: #7b68ee;
+            font-size: 17px;
+            padding: 30px;
         }
     </style>
 </head>
@@ -419,11 +377,11 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙（云端加载所有祝福） -->
+    <!-- 2 留言墙（云端跨设备） -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="message-wall" id="mainMessageWall">
-                <!-- 云端动态加载 -->
+                <div class="loading">正在加载所有祝福...</div>
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
@@ -445,10 +403,8 @@
                     <div class="time-date">2025年6月30日</div>
                     <div class="time-text">我们重新加上了彼此的好友，友谊的小船再次起航。</div>
                 </div>
-                <div class="timeline-item">
-                    <div class="time-date">今年生日</div>
-                    <div class="time-text">愿往后岁岁年年，我们仍然可以是朋友。</div>
-                </div>
+                <div class="time-date">今年生日</div>
+                <div class="time-text">愿往后岁岁年年，我们仍然可以是朋友。</div>
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
@@ -509,17 +465,16 @@
     let currentPage = 0;
     const totalPage = 5;
     const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
-    const DB_KEY = "birthday_wish_2026_wujiayu";
+
+    // 免费云端数据库 无需自己搭服务器
+    const API_URL = "https://68b7937a8b17409f9c4a5c3d2e0f9e0c.mockapi.io/birthday/wish";
 
     // 切换背景
     function setBackground(n) {
         if(n >= 1 && n <= 5) {
-            const img = backgrounds[n-1];
-            document.body.style.backgroundImage = `url(${img})`;
-            document.body.style.backgroundColor = '#e0f0ff';
+            document.body.style.backgroundImage = `url(${backgrounds[n-1]})`;
         } else {
             document.body.style.backgroundImage = "none";
-            document.body.style.background = "linear-gradient(135deg, #e0f0ff, #f3e5ff)";
         }
     }
 
@@ -542,6 +497,7 @@
                 nextBtn.innerText = "下一页";
                 nextBtn.disabled = false;
             }
+            // 进入留言墙自动加载云端所有祝福
             if(n === 2) loadCloudMessages();
         } else {
             navButtons.style.display = 'none';
@@ -561,6 +517,7 @@
     function goToVerify(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
+        document.getElementById('navButtons').style.display = 'none';
         setBackground(0);
     }
 
@@ -578,18 +535,23 @@
     function goToFriend(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
+        document.getElementById('navButtons').style.display = 'none';
         setBackground(0);
     }
 
-    // 翻页
+    // 翻页按钮事件
     document.getElementById('nextBtn').addEventListener('click', () => {
-        if(currentPage < totalPage) showPage(++currentPage);
+        if(currentPage < totalPage) {
+            showPage(++currentPage);
+        }
     });
     document.getElementById('prevBtn').addEventListener('click', () => {
-        if(currentPage > 1) showPage(--currentPage);
+        if(currentPage > 1) {
+            showPage(--currentPage);
+        }
     });
 
-    // 解锁惊喜
+    // 第4页密码游戏
     function checkPwd(){
         if(document.getElementById('pwdInput').value.trim() === "1880"){
             document.getElementById('secret').style.display = "block";
@@ -598,46 +560,58 @@
         }
     }
 
-    // 本地留言存储
-    function getCloudList(){
-        let data = localStorage.getItem(DB_KEY);
-        return data ? JSON.parse(data) : [];
-    }
-
-    // 提交祝福
+    // ========== 云端跨设备提交祝福 ==========
     async function submitMessage(){
         let name = document.getElementById("name").value.trim();
         let content = document.getElementById("content").value.trim();
         if(!name || !content){
-            alert("请填写完整信息");
+            alert("请填写完整名字和祝福内容");
             return;
         }
-        let list = getCloudList();
-        list.push({name, content, time: new Date().toLocaleString()});
-        localStorage.setItem(DB_KEY, JSON.stringify(list));
-        alert("提交成功！祝福永久保存啦");
-        document.getElementById("name").value = "";
-        document.getElementById("content").value = "";
+        let data = {
+            name: name,
+            content: content,
+            time: new Date().toLocaleString()
+        };
+        try {
+            await fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            alert("提交成功！所有设备都能看到你的祝福啦");
+            document.getElementById("name").value = "";
+            document.getElementById("content").value = "";
+        } catch (err) {
+            alert("网络异常，请稍后再试");
+        }
     }
 
-    // 加载祝福
-    function loadCloudMessages(){
-        let list = getCloudList();
+    // ========== 加载云端所有祝福 跨设备可见 ==========
+    async function loadCloudMessages(){
         let box = document.getElementById("mainMessageWall");
-        box.innerHTML = "";
-        if(list.length === 0){
-            box.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#888;">暂无祝福，快来写下第一条吧～</p>';
-            return;
+        box.innerHTML = '<div class="loading">正在加载所有祝福...</div>';
+        try {
+            let res = await fetch(API_URL);
+            let list = await res.json();
+            box.innerHTML = "";
+            if(list.length === 0){
+                box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
+                return;
+            }
+            // 倒序 最新留言在最前面
+            list.reverse().forEach(item => {
+                let div = document.createElement("div");
+                div.className = "message-card";
+                div.innerHTML = `
+                    <div class="msg-name">${item.name}</div>
+                    <p class="msg-text">${item.content}</p>
+                `;
+                box.appendChild(div);
+            });
+        } catch (err) {
+            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:red;">加载失败，请刷新页面重试</p>';
         }
-        list.forEach(item => {
-            let div = document.createElement("div");
-            div.className = "message-card";
-            div.innerHTML = `
-                <div class="msg-name">${item.name}</div>
-                <p class="msg-text">${item.content}</p>
-            `;
-            box.appendChild(div);
-        });
     }
 
     // 初始化
