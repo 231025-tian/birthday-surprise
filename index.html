@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快乐 · 专属惊喜</title>
+    <!-- 引入手写体字体 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
+            /* 全局手写体 */
+            font-family: "ZCOOL KuaiLe", "Microsoft YaHei", sans-serif;
         }
 
         body {
@@ -66,6 +69,7 @@
             cursor: pointer;
             margin: 0 10px;
             transition: 0.3s;
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .nav-btn button:hover {
             background: #7b68ee;
@@ -170,6 +174,7 @@
             font-size: 16px;
             outline: none;
             background: #f8faff;
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .game-btn {
             padding: 12px 20px;
@@ -180,6 +185,7 @@
             margin-left: 10px;
             cursor: pointer;
             transition: 0.3s;
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .game-btn:hover {
             background: #7b68ee;
@@ -193,7 +199,7 @@
             animation: fade 0.5s ease;
         }
 
-        /* 生日蛋糕 */
+        /* 生日蛋糕 放大版图片 */
         .cake-page {
             text-align: center;
             padding: 40px 20px;
@@ -207,14 +213,14 @@
             margin: 15px 0;
             letter-spacing: 5px;
         }
-     .cake-img {
-    width: 500px;
-    max-width: 100%;
-    margin: 20px auto;
-    border-radius: 15px;
-    box-shadow: 0 6px 20px rgba(147,112,219,0.2);
-    display: block;
-}
+        .cake-img {
+            width: 550px;
+            max-width: 100%;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(147,112,219,0.2);
+            display: block;
+        }
         .cake-fallback {
             font-size: 120px;
             margin: 20px 0;
@@ -237,7 +243,7 @@
             <h1>🎂 祝你生日快乐 🎂</h1>
             <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
             
-<img class="cake-img" src="./cake.jpg" alt="生日蛋糕">
+            <img class="cake-img" src="./cake.jpg" alt="生日蛋糕" onError="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
             <div id="cakeFallback" class="cake-fallback" style="display:none;">🎂</div>
             
             <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
