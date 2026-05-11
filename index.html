@@ -60,7 +60,7 @@
         }
 
         .page-content {
-            background: rgba(255,255,255,0.6); /* 降低透明度，背景能透出来 */
+            background: rgba(255,255,255,0.6);
             border-radius: 20px;
             padding: 25px;
             min-height: 480px;
@@ -90,6 +90,19 @@
         .nav-btn button:disabled {
             background: #ccc;
             cursor: not-allowed;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .back-btn button {
+            padding: 10px 25px;
+            background: #b4c8f0;
+            color: #333;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
         }
 
         .letter {
@@ -240,7 +253,6 @@
             margin-top: 15px;
         }
 
-        /* 身份选择页面 */
         .choose-box {
             text-align: center;
             padding: 60px 20px;
@@ -265,13 +277,9 @@
             transform: scale(1.05);
         }
 
-        /* 朋友祝福提交 */
-        .friend-page {
-            padding: 30px 20px;
-            text-align: center;
-        }
         .input-group {
             margin: 18px 0;
+            text-align: center;
         }
         .input-group input,
         .input-group textarea {
@@ -304,13 +312,27 @@
 <div class="container">
     <h1 class="title">✨ 专属生日惊喜 ✨</h1>
 
-    <!-- 身份选择页 -->
+    <!-- 0 身份选择 -->
     <div class="page active" id="page0">
         <div class="page-content">
             <div class="choose-box">
                 <h2>🎉 请选择你的身份 🎉</h2>
-                <button class="choose-btn" onclick="goToHerPage()">✨ 是我最特别的你</button>
-                <button class="choose-btn" onclick="goToFriendPage()">💌 我是朋友，来送祝福</button>
+                <button class="choose-btn" onclick="goToVerify()">🎂 我是寿星本人</button>
+                <button class="choose-btn" onclick="goToFriend()">💌 我是朋友送祝福</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 验证页 -->
+    <div class="page" id="verifyPage">
+        <div class="page-content">
+            <div class="game-box">
+                <h2>🔐 请输入专属密码</h2>
+                <input type="text" class="game-input" id="verifyPwd" placeholder="请输入密码">
+                <button class="game-btn" onclick="checkVerify()">验证进入</button>
+                <div class="back-btn">
+                    <button onclick="goToHome()">返回首页</button>
+                </div>
             </div>
         </div>
     </div>
@@ -321,20 +343,18 @@
             <div class="cake-page">
                 <h1>🎂 祝你生日快乐 🎂</h1>
                 <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
-                
-                <img class="cake-img" src="cake.jpg" alt="生日蛋糕" 
-                     onError="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
+                <img class="cake-img" src="cake.jpg" alt="生日蛋糕" onError="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
                 <div id="cakeFallback" class="cake-fallback">🎂</div>
-                
                 <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
             </div>
         </div>
+        <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙 -->
+    <!-- 2 留言墙（朋友提交的祝福会显示在这里！） -->
     <div class="page" id="page2">
         <div class="page-content">
-            <div class="message-wall">
+            <div class="message-wall" id="mainMessageWall">
                 <div class="message-card">
                     <div class="msg-name">匿名友人</div>
                     <p class="msg-text">生日快乐呀！愿你每天都无忧无虑，被满满的幸福包围。</p>
@@ -343,16 +363,9 @@
                     <div class="msg-name">好朋友</div>
                     <p class="msg-text">愿你所求皆如愿，所行皆坦途，岁岁平安，年年欢喜。</p>
                 </div>
-                <div class="message-card">
-                    <div class="msg-name">知心伙伴</div>
-                    <p class="msg-text">新的一岁，愿你颜值在线，好运爆棚，永远温柔且闪闪发光。</p>
-                </div>
-                <div class="message-card">
-                    <div class="msg-name">暖心寄语</div>
-                    <p class="msg-text">生日喜乐，往后余生，三餐四季，皆是温柔与美好。</p>
-                </div>
             </div>
         </div>
+        <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
     <!-- 3 时间轴 -->
@@ -368,15 +381,12 @@
                     <div class="time-text">慢慢熟悉，慢慢了解，慢慢走进彼此的生活。</div>
                 </div>
                 <div class="timeline-item">
-                    <div class="time-date">每一个平凡日常</div>
-                    <div class="time-text">因为有你，都变得温柔又闪闪发光。</div>
-                </div>
-                <div class="timeline-item">
                     <div class="time-date">今年生日</div>
                     <div class="time-text">愿往后岁岁年年，我都可以陪在你身边。</div>
                 </div>
             </div>
         </div>
+        <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
     <!-- 4 密码游戏 -->
@@ -384,14 +394,13 @@
         <div class="page-content">
             <div class="game-box">
                 <h2>解锁专属小惊喜 🔐</h2>
-                <p style="margin:15px 0; color:#666;">输入专属密码，查看隐藏心意</p>
+                <p>输入专属密码，查看隐藏心意</p>
                 <input type="text" class="game-input" id="pwdInput" placeholder="请输入密码">
                 <button class="game-btn" onclick="checkPwd()">立即解锁</button>
-                <div class="secret-msg" id="secret">
-                    ✨ 密码正确啦！你永远是我心里最特别的存在 ✨
-                </div>
+                <div class="secret-msg" id="secret">✨ 密码正确啦！你永远是我心里最特别的存在 ✨</div>
             </div>
         </div>
+        <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
     <!-- 5 给你的信 -->
@@ -399,35 +408,25 @@
         <div class="page-content">
             <div class="letter">
 提笔写下这些话，只想认真祝你生日快乐。
-
-特意为你做了这个小小的专属网站，
-把心意、温柔和所有想说的话都藏在这里。
-
-认识你之后，很多平凡的日子都变得有了意义。
-希望往后岁岁年年，你永远被温柔以待，
-永远自在明亮，永远保持自己喜欢的模样。
-
-愿清风绕肩，美好常驻，
-而我，会一直在你身旁。
+特意为你做了这个小小的专属网站，把心意都藏在这里。
+希望往后岁岁年年，你永远被温柔以待，永远自在明亮。
+愿清风绕肩，美好常驻，而我，会一直在你身旁。
             </div>
         </div>
+        <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 朋友祝福页面 -->
+    <!-- 朋友送祝福 -->
     <div class="page" id="friendPage">
         <div class="page-content">
-            <div class="friend-page">
-                <h2 style="color:#7b68ee; margin-bottom:20px;">💌 写下你的生日祝福</h2>
-                <div class="input-group">
-                    <input type="text" id="name" placeholder="请输入你的名字">
+            <div class="input-group">
+                <h2 style="color:#7b68ee; margin:20px 0;">💌 写下你的生日祝福</h2>
+                <input type="text" id="name" placeholder="你的名字">
+                <textarea id="content" placeholder="祝福内容"></textarea>
+                <button class="submit-btn" onclick="submitMessage()">提交祝福</button>
+                <div class="back-btn" style="margin-top:20px;">
+                    <button onclick="goToHome()">返回首页</button>
                 </div>
-                <div class="input-group">
-                    <textarea id="content" placeholder="请输入祝福内容"></textarea>
-                </div>
-                <button class="submit-btn" onclick="submitMsg()">提交祝福</button>
-
-                <h2 style="color:#7b68ee; margin:40px 0 20px;">📜 所有祝福</h2>
-                <div class="message-wall" id="friendMsgWall"></div>
             </div>
         </div>
     </div>
@@ -441,129 +440,95 @@
 <script>
     let currentPage = 0;
     const totalPage = 5;
+    const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 
-    const backgrounds = [
-        "bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"
-    ];
+    function setBackground(n) {
+        if(n>=1 && n<=5) document.body.style.backgroundImage = `url(${backgrounds[n-1]})`;
+        else document.body.style.backgroundImage = "none";
+    }
 
-    // 切换背景
-    function setBackground(pageNum) {
-        if(pageNum >=1 && pageNum <=5){
-            document.body.style.backgroundImage = `url(${backgrounds[pageNum-1]})`;
+    function showPage(n) {
+        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+        document.getElementById('page'+n).classList.add('active');
+        currentPage = n;
+        setBackground(n);
+
+        document.getElementById('prevBtn').style.display = (n===1) ? 'none' : 'inline-block';
+        const next = document.getElementById('nextBtn');
+        if(n===totalPage) { next.innerText="已到最后一页"; next.disabled=true; }
+        else { next.innerText="下一页"; next.disabled=false; }
+    }
+
+    function goToHome(){
+        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+        document.getElementById('page0').classList.add('active');
+        currentPage = 0;
+        setBackground(0);
+    }
+
+    function goToVerify(){
+        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+        document.getElementById('verifyPage').classList.add('active');
+        setBackground(0);
+    }
+
+    function checkVerify(){
+        const val = document.getElementById('verifyPwd').value.trim();
+        if(val === "1880"){
+            showPage(1);
+            loadMessages(); // 进入就加载留言
         }else{
-            document.body.style.backgroundImage = 'none';
+            alert("密码不正确哦！");
         }
     }
 
-    // 显示页面
-    function showPage(num){
-        document.querySelectorAll('.page').forEach(item=>{
-            item.classList.remove('active');
-        });
-        document.getElementById('page'+num).classList.add('active');
-        currentPage = num;
-        setBackground(num);
-
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-
-        if(num === 0 || num === 6){
-            prevBtn.style.display = 'none';
-            nextBtn.style.display = 'none';
-        }else{
-            nextBtn.style.display = 'inline-block';
-            prevBtn.style.display = num === 1 ? 'none' : 'inline-block';
-
-            if(num === totalPage){
-                nextBtn.innerText = '已到最后一页';
-                nextBtn.disabled = true;
-            }else{
-                nextBtn.innerText = '下一页';
-                nextBtn.disabled = false;
-            }
-        }
-    }
-
-    // 去她的专属页面
-    function goToHerPage(){
-        showPage(1);
-    }
-
-    // 去朋友祝福页面
-    function goToFriendPage(){
-        document.querySelectorAll('.page').forEach(i=>i.classList.remove('active'));
+    function goToFriend(){
+        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
-        currentPage = 6;
-        showMsgList();
+        setBackground(0);
     }
 
-    // 下一页
-    document.getElementById('nextBtn').addEventListener('click',()=>{
-        if(currentPage < totalPage){
-            currentPage++;
-            showPage(currentPage);
-        }
-    });
+    document.getElementById('nextBtn').onclick = ()=>{ if(currentPage<totalPage) showPage(++currentPage); }
+    document.getElementById('prevBtn').onclick = ()=>{ if(currentPage>1) showPage(--currentPage); }
 
-    // 上一页
-    document.getElementById('prevBtn').addEventListener('click',()=>{
-        if(currentPage > 1){
-            currentPage--;
-            showPage(currentPage);
-        }
-    });
-
-    // 密码验证
-    function checkPwd() {
-        const pwd = document.getElementById('pwdInput').value.trim();
-        if(pwd === "1880"){
-            document.getElementById('secret').style.display = "block";
+    function checkPwd(){
+        if(document.getElementById('pwdInput').value.trim()==="1880"){
+            document.getElementById('secret').style.display="block";
         }else{
-            alert("密码不对哦，再试着猜猜～");
+            alert("密码不对哦～");
         }
     }
 
-    // ======================================
-    // 朋友祝福提交（本地保存，刷新不丢）
-    // ======================================
-    function getMsgList(){
-        let list = localStorage.getItem('birthdayMsg');
-        return list ? JSON.parse(list) : [];
+    // 朋友祝福提交到第2页留言墙
+    function getMessages(){
+        let m = localStorage.getItem("birthdayMessages");
+        return m ? JSON.parse(m) : [];
     }
 
-    function submitMsg(){
-        const name = document.getElementById('name').value.trim();
-        const content = document.getElementById('content').value.trim();
-        if(!name || !content){
-            alert('请填写完整信息');
-            return;
-        }
-        let list = getMsgList();
-        list.push({name, content});
-        localStorage.setItem('birthdayMsg', JSON.stringify(list));
-        document.getElementById('name').value = '';
-        document.getElementById('content').value = '';
-        alert('提交成功！');
-        showMsgList();
+    function submitMessage(){
+        let name = document.getElementById("name").value.trim();
+        let content = document.getElementById("content").value.trim();
+        if(!name || !content){ alert("请填写完整"); return; }
+        let list = getMessages();
+        list.push({name,content});
+        localStorage.setItem("birthdayMessages", JSON.stringify(list));
+        alert("提交成功！祝福已显示在留言墙啦");
+        document.getElementById("name").value="";
+        document.getElementById("content").value="";
     }
 
-    function showMsgList(){
-        const list = getMsgList();
-        const box = document.getElementById('friendMsgWall');
-        box.innerHTML = '';
+    function loadMessages(){
+        let list = getMessages();
+        let box = document.getElementById("mainMessageWall");
         list.forEach(item=>{
-            let div = document.createElement('div');
-            div.className = 'message-card';
-            div.innerHTML = `
-                <div class="msg-name">${item.name}</div>
-                <p class="msg-text">${item.content}</p>
-            `;
+            let div = document.createElement("div");
+            div.className="message-card";
+            div.innerHTML=`<div class="msg-name">${item.name}</div><p class="msg-text">${item.content}</p>`;
             box.appendChild(div);
         });
     }
 
     setBackground(0);
 </script>
-
 </body>
 </html>
