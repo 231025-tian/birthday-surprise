@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快乐 · 专属惊喜</title>
-    <!-- 修复字体链接，GitHub 可正常加载 -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
     <style>
         * {
@@ -60,19 +59,14 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-.page-content {
-    background: rgba(255,255,255,0.2); /* 调低透明度 */
-    border-radius: 20px;
-    padding: 25px;
-    min-height: 480px;
-    box-shadow: 0 10px 35px rgba(150,130,220,0.15);
-    backdrop-filter: blur(8px); /* 毛玻璃效果，背景会被模糊 */
-}
-
-/* 给所有文字加阴影，提升可读性 */
-.time-text, .msg-text, .letter, .cake-desc, .game-box p {
-    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
+        .page-content {
+            background: rgba(255,255,255,0.6); /* 降低透明度，背景能透出来 */
+            border-radius: 20px;
+            padding: 25px;
+            min-height: 480px;
+            box-shadow: 0 10px 35px rgba(150,130,220,0.15);
+            backdrop-filter: blur(6px);
+        }
 
         .nav-btn {
             margin-top: 20px;
@@ -245,6 +239,64 @@
             color: #666;
             margin-top: 15px;
         }
+
+        /* 身份选择页面 */
+        .choose-box {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .choose-box h2 {
+            color: #7b68ee;
+            margin-bottom: 40px;
+        }
+        .choose-btn {
+            padding: 18px 40px;
+            font-size: 18px;
+            background: #9370db;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            margin: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .choose-btn:hover {
+            background: #7b68ee;
+            transform: scale(1.05);
+        }
+
+        /* 朋友祝福提交 */
+        .friend-page {
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .input-group {
+            margin: 18px 0;
+        }
+        .input-group input,
+        .input-group textarea {
+            width: 90%;
+            max-width: 450px;
+            padding: 12px 15px;
+            border: 2px solid #b4c8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+        }
+        .input-group textarea {
+            min-height: 120px;
+            resize: none;
+        }
+        .submit-btn {
+            padding: 14px 35px;
+            background: #9370db;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -252,7 +304,19 @@
 <div class="container">
     <h1 class="title">✨ 专属生日惊喜 ✨</h1>
 
-    <div class="page active" id="page1">
+    <!-- 身份选择页 -->
+    <div class="page active" id="page0">
+        <div class="page-content">
+            <div class="choose-box">
+                <h2>🎉 请选择你的身份 🎉</h2>
+                <button class="choose-btn" onclick="goToHerPage()">✨ 是我最特别的你</button>
+                <button class="choose-btn" onclick="goToFriendPage()">💌 我是朋友，来送祝福</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1 生日蛋糕 -->
+    <div class="page" id="page1">
         <div class="page-content">
             <div class="cake-page">
                 <h1>🎂 祝你生日快乐 🎂</h1>
@@ -267,6 +331,7 @@
         </div>
     </div>
 
+    <!-- 2 留言墙 -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="message-wall">
@@ -290,6 +355,7 @@
         </div>
     </div>
 
+    <!-- 3 时间轴 -->
     <div class="page" id="page3">
         <div class="page-content">
             <div class="timeline">
@@ -313,6 +379,7 @@
         </div>
     </div>
 
+    <!-- 4 密码游戏 -->
     <div class="page" id="page4">
         <div class="page-content">
             <div class="game-box">
@@ -327,6 +394,7 @@
         </div>
     </div>
 
+    <!-- 5 给你的信 -->
     <div class="page" id="page5">
         <div class="page-content">
             <div class="letter">
@@ -345,6 +413,25 @@
         </div>
     </div>
 
+    <!-- 朋友祝福页面 -->
+    <div class="page" id="friendPage">
+        <div class="page-content">
+            <div class="friend-page">
+                <h2 style="color:#7b68ee; margin-bottom:20px;">💌 写下你的生日祝福</h2>
+                <div class="input-group">
+                    <input type="text" id="name" placeholder="请输入你的名字">
+                </div>
+                <div class="input-group">
+                    <textarea id="content" placeholder="请输入祝福内容"></textarea>
+                </div>
+                <button class="submit-btn" onclick="submitMsg()">提交祝福</button>
+
+                <h2 style="color:#7b68ee; margin:40px 0 20px;">📜 所有祝福</h2>
+                <div class="message-wall" id="friendMsgWall"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="nav-btn">
         <button id="prevBtn" style="display:none;">上一页</button>
         <button id="nextBtn">下一页</button>
@@ -352,42 +439,65 @@
 </div>
 
 <script>
-    let currentPage = 1;
+    let currentPage = 0;
     const totalPage = 5;
 
-    // GitHub Pages 根目录直接用文件名即可
     const backgrounds = [
-        "bg1.jpg",
-        "bg2.jpg",
-        "bg3.jpg",
-        "bg4.jpg",
-        "bg5.jpg"
+        "bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"
     ];
 
+    // 切换背景
     function setBackground(pageNum) {
-        document.body.style.backgroundImage = `url(${backgrounds[pageNum - 1]})`;
+        if(pageNum >=1 && pageNum <=5){
+            document.body.style.backgroundImage = `url(${backgrounds[pageNum-1]})`;
+        }else{
+            document.body.style.backgroundImage = 'none';
+        }
     }
 
+    // 显示页面
     function showPage(num){
         document.querySelectorAll('.page').forEach(item=>{
             item.classList.remove('active');
         });
         document.getElementById('page'+num).classList.add('active');
-
+        currentPage = num;
         setBackground(num);
 
-        document.getElementById('prevBtn').style.display = num === 1 ? 'none' : 'inline-block';
-        
+        const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-        if(num === totalPage){
-            nextBtn.innerText = '已到最后一页';
-            nextBtn.disabled = true;
+
+        if(num === 0 || num === 6){
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
         }else{
-            nextBtn.innerText = '下一页';
-            nextBtn.disabled = false;
+            nextBtn.style.display = 'inline-block';
+            prevBtn.style.display = num === 1 ? 'none' : 'inline-block';
+
+            if(num === totalPage){
+                nextBtn.innerText = '已到最后一页';
+                nextBtn.disabled = true;
+            }else{
+                nextBtn.innerText = '下一页';
+                nextBtn.disabled = false;
+            }
         }
     }
 
+    // 去她的专属页面
+    function goToHerPage(){
+        showPage(1);
+    }
+
+    // 去朋友祝福页面
+    function goToFriendPage(){
+        document.querySelectorAll('.page').forEach(i=>i.classList.remove('active'));
+        document.getElementById('friendPage').classList.add('active');
+        currentPage = 6;
+        showMsgList();
+    }
+
+    // 下一页
     document.getElementById('nextBtn').addEventListener('click',()=>{
         if(currentPage < totalPage){
             currentPage++;
@@ -395,6 +505,7 @@
         }
     });
 
+    // 上一页
     document.getElementById('prevBtn').addEventListener('click',()=>{
         if(currentPage > 1){
             currentPage--;
@@ -402,6 +513,7 @@
         }
     });
 
+    // 密码验证
     function checkPwd() {
         const pwd = document.getElementById('pwdInput').value.trim();
         if(pwd === "1880"){
@@ -411,8 +523,46 @@
         }
     }
 
-    // 初始加载第一页背景
-    setBackground(currentPage);
+    // ======================================
+    // 朋友祝福提交（本地保存，刷新不丢）
+    // ======================================
+    function getMsgList(){
+        let list = localStorage.getItem('birthdayMsg');
+        return list ? JSON.parse(list) : [];
+    }
+
+    function submitMsg(){
+        const name = document.getElementById('name').value.trim();
+        const content = document.getElementById('content').value.trim();
+        if(!name || !content){
+            alert('请填写完整信息');
+            return;
+        }
+        let list = getMsgList();
+        list.push({name, content});
+        localStorage.setItem('birthdayMsg', JSON.stringify(list));
+        document.getElementById('name').value = '';
+        document.getElementById('content').value = '';
+        alert('提交成功！');
+        showMsgList();
+    }
+
+    function showMsgList(){
+        const list = getMsgList();
+        const box = document.getElementById('friendMsgWall');
+        box.innerHTML = '';
+        list.forEach(item=>{
+            let div = document.createElement('div');
+            div.className = 'message-card';
+            div.innerHTML = `
+                <div class="msg-name">${item.name}</div>
+                <p class="msg-text">${item.content}</p>
+            `;
+            box.appendChild(div);
+        });
+    }
+
+    setBackground(0);
 </script>
 
 </body>
