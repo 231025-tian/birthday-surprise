@@ -14,54 +14,89 @@
         }
 
         body {
-            background: linear-gradient(135deg, #e0f0ff, #e8e0ff, #d4e5ff);
             min-height: 100vh;
             padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        }
+
+        /* 每页单独背景 */
+        #page1 {
+            background: url("bg1.jpg") no-repeat center center;
+            background-size: cover;
+            border-radius: 20px;
+        }
+        #page2 {
+            background: url("bg2.jpg") no-repeat center center;
+            background-size: cover;
+            border-radius: 20px;
+        }
+        #page3 {
+            background: url("bg3.jpg") no-repeat center center;
+            background-size: cover;
+            border-radius: 20px;
+        }
+        #page4 {
+            background: url("bg4.jpg") no-repeat center center;
+            background-size: cover;
+            border-radius: 20px;
+        }
+        #page5 {
+            background: url("bg5.jpg") no-repeat center center;
+            background-size: cover;
+            border-radius: 20px;
         }
 
         .container {
             max-width: 900px;
-            width: 100%;
-            background: rgba(255,255,255,0.9);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 15px 40px rgba(150,130,220,0.2);
-            min-height: 650px;
+            margin: 0 auto;
+            min-height: 600px;
             position: relative;
         }
 
         .title {
             text-align: center;
-            font-size: 34px;
+            font-size: 32px;
             color: #7b68ee;
             margin-bottom: 30px;
             letter-spacing: 2px;
+            background: rgba(255,255,255,0.75);
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 30px;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .page {
             display: none;
-            animation: fade 0.6s ease;
-            min-height: 480px;
-            padding: 10px;
+            animation: fade 0.5s ease;
+            min-height: 600px;
+            padding: 30px;
         }
         .page.active {
             display: block;
         }
 
         @keyframes fade {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* 内容容器半透白底，不挡住背景图 */
+        .page-content {
+            background: rgba(255,255,255,0.85);
+            border-radius: 20px;
+            padding: 25px;
+            min-height: 480px;
+            box-shadow: 0 10px 35px rgba(150,130,220,0.15);
+        }
+
         .nav-btn {
-            margin-top: 30px;
+            margin-top: 20px;
             text-align: center;
         }
         .nav-btn button {
-            padding: 12px 32px;
+            padding: 12px 30px;
             background: #9370db;
             color: #fff;
             border: none;
@@ -69,35 +104,30 @@
             font-size: 16px;
             cursor: pointer;
             margin: 0 10px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(147,112,219,0.2);
+            transition: 0.3s;
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .nav-btn button:hover {
             background: #7b68ee;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(147,112,219,0.3);
         }
         .nav-btn button:disabled {
             background: #ccc;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
 
         /* 信纸 */
         .letter {
             background: #f5f8ff;
-            padding: 40px;
+            padding: 35px;
             border-radius: 15px;
-            line-height: 2.1;
+            line-height: 2;
             font-size: 17px;
             white-space: pre-line;
             border-left: 5px solid #9370db;
             color: #333;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        /* 时间轴 */
+        /* 时间轴样式 */
         .timeline {
             position: relative;
             max-width: 700px;
@@ -115,7 +145,7 @@
         }
         .timeline-item {
             position: relative;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
             padding-left: 25px;
         }
         .timeline-item::before {
@@ -127,147 +157,114 @@
             height: 16px;
             border-radius: 50%;
             background: #9370db;
-            transition: 0.3s;
-        }
-        .timeline-item:hover::before {
-            transform: scale(1.2);
-            background: #7b68ee;
         }
         .time-date {
             color: #7b68ee;
             font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 8px;
+            font-size: 17px;
+            margin-bottom: 6px;
         }
         .time-text {
             color: #555;
-            line-height: 1.8;
-            font-size: 16px;
+            line-height: 1.7;
         }
 
         /* 留言墙 */
         .message-wall {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
+            gap: 18px;
         }
         .message-card {
             background: linear-gradient(145deg, #f0f5ff, #f3f0ff);
-            padding: 25px;
+            padding: 22px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(147,112,219,0.12);
-            transition: 0.3s;
-        }
-        .message-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(147,112,219,0.18);
+            box-shadow: 0 4px 12px rgba(147,112,219,0.1);
         }
         .msg-name {
             color: #7b68ee;
             font-weight: bold;
-            margin-bottom: 12px;
-            font-size: 17px;
+            margin-bottom: 10px;
+            font-size: 16px;
         }
         .msg-text {
             color: #555;
-            line-height: 1.8;
+            line-height: 1.7;
             font-size: 15px;
         }
 
         /* 密码游戏 */
         .game-box {
             text-align: center;
-            padding: 60px 20px;
+            padding: 50px 20px;
         }
         .game-box h2 {
             color: #7b68ee;
-            margin-bottom: 20px;
-            font-size: 24px;
+            margin-bottom: 15px;
         }
         .game-input {
-            padding: 14px 18px;
-            width: 240px;
+            padding: 12px 15px;
+            width: 220px;
             border: 2px solid #b4c8f0;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 16px;
             outline: none;
             background: #f8faff;
-            transition: 0.3s;
-        }
-        .game-input:focus {
-            border-color: #9370db;
-            box-shadow: 0 0 0 3px rgba(147,112,219,0.15);
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .game-btn {
-            padding: 14px 24px;
+            padding: 12px 20px;
             background: #9370db;
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             margin-left: 10px;
             cursor: pointer;
             transition: 0.3s;
+            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .game-btn:hover {
             background: #7b68ee;
-            transform: translateY(-2px);
         }
         .secret-msg {
-            margin-top: 30px;
-            font-size: 20px;
+            margin-top: 25px;
+            font-size: 19px;
             color: #9370db;
             display: none;
-            font-weight: bold;
-            animation: fade 0.6s ease;
-            line-height: 1.6;
+            font-weight: 500;
+            animation: fade 0.5s ease;
         }
 
-        /* 生日蛋糕 */
+        /* 生日蛋糕 放大版图片 */
         .cake-page {
             text-align: center;
-            padding: 50px 20px;
+            padding: 40px 20px;
         }
         .cake-page h1 {
             color: #7b68ee;
-            margin-bottom: 20px;
-            font-size: 36px;
+            margin-bottom: 15px;
         }
         .fireworks {
-            font-size: 26px;
-            margin: 20px 0;
-            letter-spacing: 8px;
-            animation: sparkle 1.5s infinite alternate;
-        }
-        @keyframes sparkle {
-            from { opacity: 0.8; transform: scale(1); }
-            to { opacity: 1; transform: scale(1.05); }
+            font-size: 22px;
+            margin: 15px 0;
+            letter-spacing: 5px;
         }
         .cake-img {
             width: 550px;
             max-width: 100%;
-            margin: 25px auto;
-            border-radius: 20px;
-            box-shadow: 0 8px 25px rgba(147,112,219,0.25);
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(147,112,219,0.2);
             display: block;
-            transition: 0.3s;
-        }
-        .cake-img:hover {
-            transform: scale(1.02);
         }
         .cake-fallback {
-            font-size: 130px;
-            margin: 30px 0;
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            font-size: 120px;
+            margin: 20px 0;
         }
         .cake-desc {
-            font-size: 19px;
+            font-size: 18px;
             color: #666;
-            margin-top: 20px;
-            line-height: 1.6;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -278,78 +275,86 @@
 
     <!-- 第1页：生日蛋糕 -->
     <div class="page active" id="page1">
-        <div class="cake-page">
-            <h1>🎂 祝你生日快乐 🎂</h1>
-            <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
-            
-            <img class="cake-img" src="./cake.jpg" alt="生日蛋糕" onError="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
-            <div id="cakeFallback" class="cake-fallback" style="display:none;">🎂</div>
-            
-            <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
+        <div class="page-content">
+            <div class="cake-page">
+                <h1>🎂 祝你生日快乐 🎂</h1>
+                <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
+                
+                <img class="cake-img" src="./cake.jpg" alt="生日蛋糕" onError="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
+                <div id="cakeFallback" class="cake-fallback" style="display:none;">🎂</div>
+                
+                <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
+            </div>
         </div>
     </div>
 
     <!-- 第2页：留言墙 -->
     <div class="page" id="page2">
-        <div class="message-wall">
-            <div class="message-card">
-                <div class="msg-name">匿名友人</div>
-                <p class="msg-text">生日快乐呀！愿你每天都无忧无虑，被满满的幸福包围。</p>
-            </div>
-            <div class="message-card">
-                <div class="msg-name">好朋友</div>
-                <p class="msg-text">愿你所求皆如愿，所行皆坦途，岁岁平安，年年欢喜。</p>
-            </div>
-            <div class="message-card">
-                <div class="msg-name">知心伙伴</div>
-                <p class="msg-text">新的一岁，愿你颜值在线，好运爆棚，永远温柔且闪闪发光。</p>
-            </div>
-            <div class="message-card">
-                <div class="msg-name">暖心寄语</div>
-                <p class="msg-text">生日喜乐，往后余生，三餐四季，皆是温柔与美好。</p>
+        <div class="page-content">
+            <div class="message-wall">
+                <div class="message-card">
+                    <div class="msg-name">匿名友人</div>
+                    <p class="msg-text">生日快乐呀！愿你每天都无忧无虑，被满满的幸福包围。</p>
+                </div>
+                <div class="message-card">
+                    <div class="msg-name">好朋友</div>
+                    <p class="msg-text">愿你所求皆如愿，所行皆坦途，岁岁平安，年年欢喜。</p>
+                </div>
+                <div class="message-card">
+                    <div class="msg-name">知心伙伴</div>
+                    <p class="msg-text">新的一岁，愿你颜值在线，好运爆棚，永远温柔且闪闪发光。</p>
+                </div>
+                <div class="message-card">
+                    <div class="msg-name">暖心寄语</div>
+                    <p class="msg-text">生日喜乐，往后余生，三餐四季，皆是温柔与美好。</p>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- 第3页：相识时间轴 -->
     <div class="page" id="page3">
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="time-date">某年某月某日</div>
-                <div class="time-text">我们初次相遇，故事从这一刻悄悄开始。</div>
-            </div>
-            <div class="timeline-item">
-                <div class="time-date">往后的日子</div>
-                <div class="time-text">慢慢熟悉，慢慢了解，慢慢走进彼此的生活。</div>
-            </div>
-            <div class="timeline-item">
-                <div class="time-date">每一个平凡日常</div>
-                <div class="time-text">因为有你，都变得温柔又闪闪发光。</div>
-            </div>
-            <div class="timeline-item">
-                <div class="time-date">今年生日</div>
-                <div class="time-text">愿往后岁岁年年，我都可以陪在你身边。</div>
+        <div class="page-content">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="time-date">某年某月某日</div>
+                    <div class="time-text">我们初次相遇，故事从这一刻悄悄开始。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time-date">往后的日子</div>
+                    <div class="time-text">慢慢熟悉，慢慢了解，慢慢走进彼此的生活。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time-date">每一个平凡日常</div>
+                    <div class="time-text">因为有你，都变得温柔又闪闪发光。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="time-date">今年生日</div>
+                    <div class="time-text">愿往后岁岁年年，我都可以陪在你身边。</div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- 第4页：密码游戏 -->
     <div class="page" id="page4">
-        <div class="game-box">
-            <h2>🔐 解锁专属小惊喜 🔐</h2>
-            <p style="margin:15px 0; color:#666;">输入专属密码，查看隐藏心意</p>
-            <input type="text" class="game-input" id="pwdInput" placeholder="请输入密码">
-            <button class="game-btn" onclick="checkPwd()">立即解锁</button>
-            <div class="secret-msg" id="secret">
-                ✨ 密码正确啦！<br>
-                你永远是我心里最特别、最珍贵的存在 ✨
+        <div class="page-content">
+            <div class="game-box">
+                <h2>解锁专属小惊喜 🔐</h2>
+                <p style="margin:15px 0; color:#666;">输入专属密码，查看隐藏心意</p>
+                <input type="text" class="game-input" id="pwdInput" placeholder="请输入密码">
+                <button class="game-btn" onclick="checkPwd()">立即解锁</button>
+                <div class="secret-msg" id="secret">
+                    ✨ 密码正确啦！你永远是我心里最特别的存在 ✨
+                </div>
             </div>
         </div>
     </div>
 
     <!-- 第5页：给你的信 -->
     <div class="page" id="page5">
-        <div class="letter">
+        <div class="page-content">
+            <div class="letter">
 提笔写下这些话，只想认真祝你生日快乐。
 
 特意为你做了这个小小的专属网站，
@@ -361,6 +366,7 @@
 
 愿清风绕肩，美好常驻，
 而我，会一直在你身旁。
+            </div>
         </div>
     </div>
 
@@ -406,27 +412,19 @@
     document.getElementById('prevBtn').addEventListener('click',()=>{
         if(currentPage > 1){
             currentPage--;
+            currentPage--;
             showPage(currentPage);
         }
     });
 
-    // 密码验证
     function checkPwd() {
         const pwd = document.getElementById('pwdInput').value.trim();
-        // 你可以在这里修改密码
         if(pwd === "1880"){
             document.getElementById('secret').style.display = "block";
         }else{
             alert("密码不对哦，再试着猜猜～");
         }
     }
-
-    // 回车提交密码（体验更好）
-    document.getElementById('pwdInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            checkPwd();
-        }
-    });
 </script>
 
 </body>
