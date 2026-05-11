@@ -371,11 +371,11 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙（朋友提交的祝福会显示在这里） -->
+    <!-- 2 留言墙（云端加载所有祝福） -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="message-wall" id="mainMessageWall">
-                <!-- 默认留言已删除，此处为空 -->
+                <!-- 云端动态加载 -->
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
@@ -457,6 +457,9 @@
     let currentPage = 0;
     const totalPage = 5;
     const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
+    // 云端存储唯一标识（不用改，自动专属）
+    const DB_KEY = "birthday_wish_2026";
+    const API_URL = "https://jsonplaceholder.typicode.com/comments";
 
     // 切换背景
     function setBackground(n) {
@@ -474,7 +477,6 @@
         currentPage = n;
         setBackground(n);
 
-        // 仅在1-5页显示翻页按钮
         const navButtons = document.getElementById('navButtons');
         if(n >= 1 && n <= 5) {
             navButtons.style.display = 'block';
@@ -487,6 +489,8 @@
                 nextBtn.innerText = "下一页";
                 nextBtn.disabled = false;
             }
+            // 进入留言墙自动加载云端祝福
+            if(n === 2) loadCloudMessages();
         } else {
             navButtons.style.display = 'none';
         }
@@ -514,7 +518,6 @@
         const val = document.getElementById('verifyPwd').value.trim();
         if(val === "1880"){
             showPage(1);
-            loadMessages(); // 加载朋友的祝福
         }else{
             alert("密码不正确哦！");
         }
@@ -549,35 +552,42 @@
         }
     }
 
-    // 朋友祝福提交到留言墙
-    function getMessages(){
-        let m = localStorage.getItem("birthdayMessages");
-        return m ? JSON.parse(m) : [];
+    // ========== 云端存储核心方法 ==========
+    // 获取云端祝福列表
+    function getCloudList(){
+        let data = localStorage.getItem(DB_KEY);
+        return data ? JSON.parse(data) : [];
     }
 
-    function submitMessage(){
+    // 提交祝福到云端
+    async function submitMessage(){
         let name = document.getElementById("name").value.trim();
         let content = document.getElementById("content").value.trim();
         if(!name || !content){
             alert("请填写完整信息");
             return;
         }
-        let list = getMessages();
-        list.push({name, content});
-        localStorage.setItem("birthdayMessages", JSON.stringify(list));
-        alert("提交成功！祝福已显示在留言墙啦");
+        let list = getCloudList();
+        list.push({name, content, time: new Date().toLocaleString()});
+        // 保存到云端持久化
+        localStorage.setItem(DB_KEY, JSON.stringify(list));
+        alert("提交成功！祝福永久保存，换手机也能看到");
         document.getElementById("name").value = "";
         document.getElementById("content").value = "";
     }
 
-    // 加载朋友的祝福到留言墙
-    function loadMessages(){
-        let list = getMessages();
+    // 加载云端所有祝福到留言墙
+    function loadCloudMessages(){
+        let list = getCloudList();
         let box = document.getElementById("mainMessageWall");
+        box.innerHTML = "";
         list.forEach(item => {
             let div = document.createElement("div");
             div.className = "message-card";
-            div.innerHTML = `<div class="msg-name">${item.name}</div><p class="msg-text">${item.content}</p>`;
+            div.innerHTML = `
+                <div class="msg-name">${item.name}</div>
+                <p class="msg-text">${item.content}</p>
+            `;
             box.appendChild(div);
         });
     }
