@@ -15,40 +15,18 @@
 
         body {
             min-height: 100vh;
+            /* 默认背景，防止加载前空白 */
+            background: #e0f0ff;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: background 0.5s ease;
             padding: 20px;
         }
-
-        /* 每页单独背景 */
-#page1 {
-    background: url("/birthday-surprise/bg1.jpg") no-repeat center center;
-    background-size: cover;
-    border-radius: 20px;
-}
-#page2 {
-    background: url("/birthday-surprise/bg2.jpg") no-repeat center center;
-    background-size: cover;
-    border-radius: 20px;
-}
-#page3 {
-    background: url("/birthday-surprise/bg3.jpg") no-repeat center center;
-    background-size: cover;
-    border-radius: 20px;
-}
-#page4 {
-    background: url("/birthday-surprise/bg4.jpg") no-repeat center center;
-    background-size: cover;
-    border-radius: 20px;
-}
-#page5 {
-    background: url("/birthday-surprise/bg5.jpg") no-repeat center center;
-    background-size: cover;
-    border-radius: 20px;
-}
 
         .container {
             max-width: 900px;
             margin: 0 auto;
-            min-height: 600px;
             position: relative;
         }
 
@@ -380,12 +358,30 @@
 <script>
     let currentPage = 1;
     const totalPage = 5;
+    const repoName = "birthday-surprise"; // 你的仓库名
+
+    // 每页对应的背景图路径
+    const backgrounds = [
+        `/${repoName}/bg1.jpg`,
+        `/${repoName}/bg2.jpg`,
+        `/${repoName}/bg3.jpg`,
+        `/${repoName}/bg4.jpg`,
+        `/${repoName}/bg5.jpg`
+    ];
+
+    // 切换背景图
+    function setBackground(pageNum) {
+        document.body.style.backgroundImage = `url(${backgrounds[pageNum - 1]})`;
+    }
 
     function showPage(num){
         document.querySelectorAll('.page').forEach(item=>{
             item.classList.remove('active');
         });
         document.getElementById('page'+num).classList.add('active');
+
+        // 切换背景
+        setBackground(num);
 
         if(num === 1){
             document.getElementById('prevBtn').style.display = 'none';
@@ -412,7 +408,6 @@
     document.getElementById('prevBtn').addEventListener('click',()=>{
         if(currentPage > 1){
             currentPage--;
-            currentPage--;
             showPage(currentPage);
         }
     });
@@ -425,6 +420,9 @@
             alert("密码不对哦，再试着猜猜～");
         }
     }
+
+    // 初始加载背景
+    setBackground(currentPage);
 </script>
 
 </body>
