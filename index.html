@@ -394,11 +394,11 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙（朋友提交的祝福会显示在这里） -->
+    <!-- 2 留言墙（朋友提交的祝福会显示在这里，已清空所有固定内容） -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="message-wall" id="mainMessageWall">
-                <!-- 已清空所有默认留言 -->
+                <!-- 这里现在是空的，只会显示朋友提交的祝福 -->
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
@@ -599,6 +599,8 @@
 
     // 加载朋友的祝福到留言墙
     function loadMessages(){
+        // 每次加载前先清空留言墙，避免重复或旧内容
+        document.getElementById("mainMessageWall").innerHTML = "";
         let list = getMessages();
         let box = document.getElementById("mainMessageWall");
         list.forEach(item => {
