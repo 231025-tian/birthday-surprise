@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快乐 · 专属惊喜</title>
+    <!-- 引入Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
     <style>
-        /* 复刻同款橙奶配色变量 */
         :root {
             --light-blue: #B8E0E2;
             --cream-yellow: #FAE39E;
@@ -117,7 +118,6 @@
             font-family: "ZCOOL KuaiLe", sans-serif;
         }
 
-        /* 清空留言按钮样式 */
         .clear-btn-wrap {
             text-align: center;
             margin-top: 25px;
@@ -190,7 +190,6 @@
             font-size: 17px;
         }
 
-        /* ========== 全新改版：留言墙 复刻第二款样式 ========== */
         .message-wall {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -317,7 +316,6 @@
             transform: scale(1.05);
         }
 
-        /* ========== 全新改版：朋友祝福提交页 复刻第二款样式 ========== */
         .friend-page {
             padding: 30px 20px;
             text-align: center;
@@ -375,7 +373,6 @@
 <div class="container">
     <h1 class="title">✨ 专属生日惊喜 ✨</h1>
 
-    <!-- 0 身份选择页 -->
     <div class="page active" id="page0">
         <div class="page-content">
             <div class="choose-box">
@@ -386,7 +383,6 @@
         </div>
     </div>
 
-    <!-- 密码验证页 -->
     <div class="page" id="verifyPage">
         <div class="page-content">
             <div class="game-box">
@@ -400,7 +396,6 @@
         </div>
     </div>
 
-    <!-- 1 生日蛋糕页 -->
     <div class="page" id="page1">
         <div class="page-content">
             <div class="cake-page">
@@ -414,13 +409,10 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙 -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="message-wall" id="mainMessageWall">
-                <!-- 空白留言墙 -->
             </div>
-            <!-- 一键清空留言按钮 -->
             <div class="clear-btn-wrap">
                 <button class="clear-btn" onclick="clearAllMessage()">清空所有留言</button>
             </div>
@@ -428,7 +420,6 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 3 时间轴 -->
     <div class="page" id="page3">
         <div class="page-content">
             <div class="timeline">
@@ -453,7 +444,6 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 4 密码游戏页 -->
     <div class="page" id="page4">
         <div class="page-content">
             <div class="game-box">
@@ -467,7 +457,6 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 5 给你的信 -->
     <div class="page" id="page5">
         <div class="page-content">
             <div class="letter">
@@ -480,7 +469,6 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 朋友送祝福页 -->
     <div class="page" id="friendPage">
         <div class="page-content">
             <div class="friend-page">
@@ -497,7 +485,6 @@
         </div>
     </div>
 
-    <!-- 翻页按钮（仅验证通过后才会出现） -->
     <div class="nav-btn" id="navButtons" style="display:none;">
         <button id="prevBtn">上一页</button>
         <button id="nextBtn">下一页</button>
@@ -509,7 +496,13 @@
     const totalPage = 5;
     const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 
-    // 切换背景
+    // ========== 你自己的Supabase信息 ==========
+    const supabaseUrl = "https://pfwrrxoithqbwlrtlhnz.supabase.co";
+    const supabaseKey = "sb_publishable_AypGPast9PxEYR-RKZVfxA_Klc5Yap_";
+    // ========================================
+
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
     function setBackground(n) {
         if(n >= 1 && n <= 5) {
             document.body.style.backgroundImage = `url(${backgrounds[n-1]})`;
@@ -518,14 +511,12 @@
         }
     }
 
-    // 显示指定页面
     function showPage(n) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page' + n).classList.add('active');
         currentPage = n;
         setBackground(n);
 
-        // 仅在1-5页显示翻页按钮
         const navButtons = document.getElementById('navButtons');
         if(n >= 1 && n <= 5) {
             navButtons.style.display = 'block';
@@ -541,9 +532,10 @@
         } else {
             navButtons.style.display = 'none';
         }
+
+        if (n === 2) loadMessages();
     }
 
-    // 返回首页
     function goToHome(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page0').classList.add('active');
@@ -552,7 +544,6 @@
         setBackground(0);
     }
 
-    // 进入验证页
     function goToVerify(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
@@ -560,18 +551,15 @@
         setBackground(0);
     }
 
-    // 验证密码
     function checkVerify(){
         const val = document.getElementById('verifyPwd').value.trim();
         if(val === "1880"){
             showPage(1);
-            loadMessages(); // 加载朋友的祝福
         }else{
             alert("密码不正确哦！");
         }
     }
 
-    // 进入朋友祝福页
     function goToFriend(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
@@ -579,7 +567,6 @@
         setBackground(0);
     }
 
-    // 翻页按钮事件
     document.getElementById('nextBtn').addEventListener('click', () => {
         if(currentPage < totalPage) {
             showPage(++currentPage);
@@ -591,7 +578,6 @@
         }
     });
 
-    // 第4页密码游戏
     function checkPwd(){
         if(document.getElementById('pwdInput').value.trim() === "1880"){
             document.getElementById('secret').style.display = "block";
@@ -600,52 +586,107 @@
         }
     }
 
-    // 朋友祝福提交到留言墙
-    function getMessages(){
-        let m = localStorage.getItem("birthdayMessages");
-        return m ? JSON.parse(m) : [];
+    // 逆地址解析（经纬度 → 省市区）
+    async function getAddress(lat, lng) {
+        try {
+            const res = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&apiKey=41972c34a06c47079d3365990c14c65d`);
+            const data = await res.json();
+            if (data.features && data.features.length > 0) {
+                const props = data.features[0].properties;
+                return `${props.city || props.town || ''} ${props.district || ''}`.trim();
+            }
+        } catch (e) {}
+        return "未知位置";
     }
 
-    function submitMessage(){
-        let name = document.getElementById("name").value.trim();
-        let content = document.getElementById("content").value.trim();
+    // 提交祝福+定位
+    async function submitMessage(){
+        const name = document.getElementById("name").value.trim();
+        const content = document.getElementById("content").value.trim();
         if(!name || !content){
             alert("请填写完整信息");
             return;
         }
-        let list = getMessages();
-        list.push({name, content});
-        localStorage.setItem("birthdayMessages", JSON.stringify(list));
+
+        let lat = null, lng = null;
+        if (navigator.geolocation) {
+            try {
+                const pos = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject);
+                });
+                lat = pos.coords.latitude;
+                lng = pos.coords.longitude;
+            } catch (e) {}
+        }
+
+        const { error } = await supabase
+            .from("birthday_wishes")
+            .insert([{ name, content, lat, lng }]);
+
+        if (error) {
+            alert("提交失败：" + error.message);
+            return;
+        }
+
         alert("提交成功！祝福已显示在留言墙啦");
         document.getElementById("name").value = "";
         document.getElementById("content").value = "";
-        loadMessages();
     }
 
-    // 加载朋友的祝福到留言墙
-    function loadMessages(){
-        // 每次加载先清空容器
-        document.getElementById("mainMessageWall").innerHTML = "";
-        let list = getMessages();
-        let box = document.getElementById("mainMessageWall");
-        list.forEach(item => {
-            let div = document.createElement("div");
+    // 加载留言 + 显示地址
+    async function loadMessages(){
+        const wall = document.getElementById("mainMessageWall");
+        wall.innerHTML = "正在加载祝福...";
+
+        const { data: list, error } = await supabase
+            .from("birthday_wishes")
+            .select("*")
+            .order("created_at", { ascending: false });
+
+        if (error) {
+            wall.innerHTML = "<p>加载失败</p>";
+            return;
+        }
+
+        wall.innerHTML = "";
+
+        for (const item of list) {
+            const div = document.createElement("div");
             div.className = "message-card";
-            div.innerHTML = `<div class="msg-name">${item.name}</div><p class="msg-text">${item.content}</p>`;
-            box.appendChild(div);
-        });
-    }
 
-    // 一键清空所有留言
-    function clearAllMessage(){
-        if(confirm("确定要清空所有留言吗？删除后无法恢复！")){
-            localStorage.removeItem("birthdayMessages");
-            document.getElementById("mainMessageWall").innerHTML = "";
-            alert("已清空所有留言！");
+            let locationText = "";
+            if (item.lat && item.lng) {
+                const addr = await getAddress(item.lat, item.lng);
+                locationText = `<div style="font-size:12px;color:#888;margin-top:6px;">📍 ${addr}</div>`;
+            }
+
+            div.innerHTML = `
+                <div class="msg-name">${item.name}</div>
+                <p class="msg-text">${item.content}</p>
+                ${locationText}
+            `;
+            wall.appendChild(div);
         }
     }
 
-    // 初始化
+    // 清空云端留言
+    async function clearAllMessage(){
+        if(!confirm("确定要清空所有留言吗？删除后无法恢复！")) return;
+
+        const { error } = await supabase
+            .from("birthday_wishes")
+            .delete()
+            .neq("id", "00000000-0000-0000-0000-000000000000");
+
+        if (error) {
+            alert("清空失败：" + error.message);
+            return;
+        }
+
+        alert("已清空所有留言！");
+        loadMessages();
+    }
+
     setBackground(0);
 </script>
 </body>
