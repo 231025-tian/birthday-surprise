@@ -6,6 +6,15 @@
     <title>生日快乐 · 专属惊喜</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
     <style>
+        /* 复刻同款橙奶配色变量 */
+        :root {
+            --light-blue: #B8E0E2;
+            --cream-yellow: #FAE39E;
+            --bright-yellow: #FAC356;
+            --orange-cream: #FC9F66;
+            --text-color: #5d5d5d;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -161,25 +170,27 @@
             font-size: 17px;
         }
 
+        /* ========== 全新改版：留言墙 复刻第二款样式 ========== */
         .message-wall {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 18px;
         }
         .message-card {
-            background: linear-gradient(145deg, #f0f5ff, #f3f0ff);
+            background: #fff;
             padding: 22px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(147,112,219,0.1);
+            border-radius: 18px;
+            border: 1px solid var(--cream-yellow);
+            box-shadow: 0 4px 12px rgba(252,159,102,0.1);
         }
         .msg-name {
-            color: #7b68ee;
-            font-weight: bold;
+            color: var(--orange-cream);
+            font-weight: 600;
             margin-bottom: 10px;
             font-size: 18px;
         }
         .msg-text {
-            color: #555;
+            color: var(--text-color);
             line-height: 1.8;
             font-size: 16px;
         }
@@ -286,14 +297,16 @@
             transform: scale(1.05);
         }
 
+        /* ========== 全新改版：朋友祝福提交页 复刻第二款样式 ========== */
         .friend-page {
             padding: 30px 20px;
             text-align: center;
         }
         .friend-page h2 {
-            color: #7b68ee;
+            color: var(--orange-cream);
             margin-bottom: 30px;
             font-size: 22px;
+            font-weight: 600;
         }
         .input-group {
             margin: 18px auto;
@@ -303,27 +316,37 @@
         .input-group input,
         .input-group textarea {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #b4c8f0;
-            border-radius: 12px;
-            font-size: 17px;
+            padding: 14px;
+            border: 2px solid var(--cream-yellow);
+            border-radius: 30px;
+            font-size: 16px;
             outline: none;
-            font-family: "ZCOOL KuaiLe", sans-serif;
+            font-family: "ZCOOL KuaiLe", "Microsoft YaHei", sans-serif;
+            color: var(--orange-cream);
+            background: transparent;
         }
         .input-group textarea {
             min-height: 120px;
             resize: none;
+            border-radius: 18px;
         }
         .submit-btn {
-            padding: 14px 35px;
-            background: #9370db;
+            background-color: var(--bright-yellow);
             color: white;
             border: none;
-            border-radius: 14px;
-            font-size: 18px;
+            padding: 14px 30px;
+            font-size: 16px;
+            border-radius: 30px;
             cursor: pointer;
+            transition: 0.3s;
+            width: 85%;
             margin-top: 10px;
+            font-weight: bold;
             font-family: "ZCOOL KuaiLe", sans-serif;
+        }
+        .submit-btn:hover {
+            background-color: var(--orange-cream);
+            transform: scale(1.02);
         }
     </style>
 </head>
