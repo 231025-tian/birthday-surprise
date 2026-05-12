@@ -498,7 +498,7 @@
 
     // ========== 替换成你自己的 Supabase 信息 ==========
     const supabaseUrl = "https://pfwrrxoithqbwlrtlhnz.supabase.co";
-    const supabaseKey = "你的 Publishable key";
+    const supabaseKey = "sb_publishable_AypGPast9PxEYR-RKZVfxA_Klc5Yap_";
     // =================================================
 
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -536,7 +536,6 @@
         if (n === 2) loadMessages();
     }
 
-    // 🔑 这两个函数之前丢了，现在补上了！
     function goToHome(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page0').classList.add('active');
