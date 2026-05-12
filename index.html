@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快乐 · 专属惊喜</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -18,6 +20,10 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #e0f0ff, #f3e5ff);
             padding: 20px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: background 0.5s ease;
         }
 
         .container {
@@ -101,6 +107,9 @@
             cursor: pointer;
             font-size: 16px;
         }
+        .back-btn button:hover {
+            background: #93b0e0;
+        }
 
         .letter {
             background: #f5f8ff;
@@ -165,6 +174,10 @@
             padding: 22px;
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(147,112,219,0.1);
+            transition: 0.3s;
+        }
+        .message-card:hover {
+            transform: translateY(-3px);
         }
         .msg-name {
             color: #7b68ee;
@@ -313,6 +326,10 @@
             font-size: 18px;
             cursor: pointer;
             margin-top: 10px;
+            transition: 0.3s;
+        }
+        .submit-btn:hover {
+            background: #7b68ee;
         }
         .loading {
             text-align: center;
@@ -343,7 +360,7 @@
         <div class="page-content">
             <div class="game-box">
                 <h2>🔐 请输入专属密码</h2>
-                <input type="text" class="game-input" id="verifyPwd" placeholder="请输入密码">
+                <input type="password" class="game-input" id="verifyPwd" placeholder="请输入密码" onkeydown="if(event.key==='Enter')checkVerify()">
                 <button class="game-btn" onclick="checkVerify()">验证进入</button>
             </div>
             <div class="back-btn">
@@ -366,7 +383,7 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙（本地版） -->
+    <!-- 2 留言墙（云端跨设备） -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="message-wall" id="mainMessageWall">
@@ -407,7 +424,7 @@
             <div class="game-box">
                 <h2>解锁专属小惊喜 🔐</h2>
                 <p style="margin:15px 0; color:#666; font-size:17px;">输入专属密码，查看小惊喜</p>
-                <input type="text" class="game-input" id="pwdInput" placeholder="请输入密码">
+                <input type="password" class="game-input" id="pwdInput" placeholder="请输入密码" onkeydown="if(event.key==='Enter')checkPwd()">
                 <button class="game-btn" onclick="checkPwd()">立即解锁</button>
                 <div class="secret-msg" id="secret">✨ 密码正确啦！记得凭此页面截图领取生日礼物哦 ✨</div>
             </div>
@@ -455,25 +472,29 @@
 <script>
     let currentPage = 0;
     const totalPage = 5;
-    const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 
-    // 本地留言存储
-    function getMessages() {
-        const data = localStorage.getItem('birthday-wishes');
-        return data ? JSON.parse(data) : [];
-    }
-    function saveMessage(name, content) {
-        const msgs = getMessages();
-        msgs.unshift({ name, content, time: new Date().toLocaleString() });
-        localStorage.setItem('birthday-wishes', JSON.stringify(msgs));
-    }
+    // Firebase 可用配置
+    const firebaseConfig = {
+        apiKey: "AIzaSyC9k1c6Gyv2kfK5Xa0x8J0LlYdQk1bVJ8M",
+        authDomain: "birthday-wishes-2026.firebaseapp.com",
+        projectId: "birthday-wishes-2026",
+        storageBucket: "birthday-wishes-2026.firebasestorage.app",
+        messagingSenderId: "751940310300",
+        appId: "1:751940310300:web:2c1a622d47a8f8a0e05d19"
+    };
 
-    // 切换背景
+    // 初始化 Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const messagesRef = db.collection("birthday-wishes");
+
+    // 切换背景（无本地图片也正常显示）
     function setBackground(n) {
         if(n >= 1 && n <= 5) {
-            document.body.style.backgroundImage = `url(${backgrounds[n-1]})`;
+            document.body.style.backgroundImage = "none";
         } else {
             document.body.style.backgroundImage = "none";
+            document.body.style.background = "linear-gradient(135deg, #e0f0ff, #f3e5ff)";
         }
     }
 
@@ -515,6 +536,7 @@
     function goToVerify(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
+        document.getElementById('verifyPwd').value = "";
         setBackground(0);
     }
 
@@ -532,6 +554,8 @@
     function goToFriend(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
+        document.getElementById('name').value = "";
+        document.getElementById('content').value = "";
         setBackground(0);
     }
 
@@ -557,40 +581,56 @@
     }
 
     // 提交祝福
-    function submitMessage(){
+    async function submitMessage(){
         let name = document.getElementById("name").value.trim();
         let content = document.getElementById("content").value.trim();
         if(!name || !content){
             alert("请填写完整名字和祝福内容");
             return;
         }
-        saveMessage(name, content);
-        alert("提交成功！刷新留言墙就能看到啦");
-        document.getElementById("name").value = "";
-        document.getElementById("content").value = "";
-        loadCloudMessages();
+        try {
+            await messagesRef.add({
+                name: name,
+                content: content,
+                time: new Date()
+            });
+            alert("提交成功！祝福已上墙～");
+            document.getElementById("name").value = "";
+            document.getElementById("content").value = "";
+        } catch (err) {
+            alert("提交失败，请检查网络后重试");
+            console.error(err);
+        }
     }
 
     // 加载留言
-    function loadCloudMessages(){
+    async function loadCloudMessages(){
         let box = document.getElementById("mainMessageWall");
         box.innerHTML = '<div class="loading">正在加载所有祝福...</div>';
-        
-        let list = getMessages();
-        box.innerHTML = "";
-        if(list.length === 0){
-            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
-            return;
+        try {
+            const snapshot = await messagesRef.orderBy("time", "desc").get();
+            let list = [];
+            snapshot.forEach(doc => {
+                list.push(doc.data());
+            });
+            box.innerHTML = "";
+            if(list.length === 0){
+                box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
+                return;
+            }
+            list.forEach(item => {
+                let div = document.createElement("div");
+                div.className = "message-card";
+                div.innerHTML = `
+                    <div class="msg-name">${item.name}</div>
+                    <p class="msg-text">${item.content}</p>
+                `;
+                box.appendChild(div);
+            });
+        } catch (err) {
+            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:red;">加载失败，请刷新页面重试</p>';
+            console.error(err);
         }
-        list.forEach(item => {
-            let div = document.createElement("div");
-            div.className = "message-card";
-            div.innerHTML = `
-                <div class="msg-name">${item.name}</div>
-                <p class="msg-text">${item.content}</p>
-            `;
-            box.appendChild(div);
-        });
     }
 
     // 初始化
