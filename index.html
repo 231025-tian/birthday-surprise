@@ -369,7 +369,7 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙（云端跨设备） -->
+    <!-- 2 留言墙（本地存储 · 和解密页同款） -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="message-wall" id="mainMessageWall">
@@ -534,65 +534,56 @@
         }
     }
 
-    // 提交祝福（本地存储，所有设备通用）
-   // ========== 新版：本地储存祝福（和解密页同款机制） ==========
-function submitMessage() {
-    let name = document.getElementById("name").value.trim();
-    let content = document.getElementById("content").value.trim();
+    // ======================
+    // 【已替换】和解密页完全同款的祝福储存系统
+    // 本地存储 + 防重复提交
+    // ======================
+    function submitMessage() {
+        let name = document.getElementById("name").value.trim();
+        let content = document.getElementById("content").value.trim();
 
-    if (!name || !content) {
-        alert("请填写完整名字和祝福内容");
-        return;
+        if (!name || !content) {
+            alert("请填写完整名字和祝福内容");
+            return;
+        }
+
+        // 防重复提交（和你解密页逻辑一模一样）
+        if (localStorage.getItem('hasSubmitted')) {
+            alert("你已经送过祝福啦，感谢你的心意！");
+            return;
+        }
+
+        let newMsg = {
+            name: name,
+            content: content,
+            time: new Date().toLocaleString()
+        };
+
+        // 读取已有祝福
+        let messages = JSON.parse(localStorage.getItem('birthdayMessages') || '[]');
+        messages.push(newMsg);
+
+        // 保存到本地
+        localStorage.setItem('birthdayMessages', JSON.stringify(messages));
+        localStorage.setItem('hasSubmitted', 'true');
+
+        alert("提交成功！来自你的祝福已成功送达！");
+        document.getElementById("name").value = "";
+        document.getElementById("content").value = "";
     }
 
-    // 防重复提交（和解密页一样逻辑）
-    if (localStorage.getItem('hasSubmitted')) {
-        alert("你已经送过祝福啦，感谢你的心意！");
-        return;
-    }
+    // 加载祝福留言
+    function loadCloudMessages() {
+        let box = document.getElementById("mainMessageWall");
+        let messages = JSON.parse(localStorage.getItem('birthdayMessages') || '[]');
 
-    let newMsg = {
-        name: name,
-        content: content,
-        time: new Date().toLocaleString()
-    };
+        box.innerHTML = "";
+        if (messages.length === 0) {
+            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
+            return;
+        }
 
-    // 读取已有祝福
-    let messages = JSON.parse(localStorage.getItem('birthdayMessages') || '[]');
-    messages.push(newMsg);
-
-    // 保存到本地
-    localStorage.setItem('birthdayMessages', JSON.stringify(messages));
-    localStorage.setItem('hasSubmitted', 'true'); // 标记已提交
-
-    alert("提交成功！来自你的祝福已成功送达！");
-    document.getElementById("name").value = "";
-    document.getElementById("content").value = "";
-}
-
-// ========== 加载所有祝福 ==========
-function loadCloudMessages() {
-    let box = document.getElementById("mainMessageWall");
-    let messages = JSON.parse(localStorage.getItem('birthdayMessages') || '[]');
-
-    box.innerHTML = "";
-    if (messages.length === 0) {
-        box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
-        return;
-    }
-
-    // 倒序展示：最新的在最前面
-    messages.reverse().forEach(item => {
-        let div = document.createElement("div");
-        div.className = "message-card";
-        div.innerHTML = `
-            <div class="msg-name">${item.name}</div>
-            <p class="msg-text">${item.content}</p>
-        `;
-        box.appendChild(div);
-    });
-}
-        
+        // 最新的在最前面
         messages.reverse().forEach(item => {
             let div = document.createElement("div");
             div.className = "message-card";
