@@ -477,10 +477,10 @@
     const totalPage = 5;
     const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 
-    // ========== 你的项目信息已自动填好 ==========
+    // ========== 你的 Supabase 信息 ==========
     const supabaseUrl = "https://pfwrrxoithqbwlrtlhnz.supabase.co";
-    const supabaseKey = "sbp_2fdce572664720970567091a0227459472249999";
-    // ==========================================
+    const supabaseKey = "你的 Publishable key";
+    // =======================================
 
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
@@ -516,7 +516,7 @@
         if (n === 2) loadMessages();
     }
 
-    // 全局函数，不会再报错
+    // 👇 关键修复：这三个函数直接定义在全局作用域
     function goToHome(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page0').classList.add('active');
@@ -536,6 +536,7 @@
         document.getElementById('navButtons').style.display = 'none';
         setBackground(0);
     }
+
     function checkVerify(){
         const val = document.getElementById('verifyPwd').value.trim();
         if(val === "1880"){
@@ -559,7 +560,7 @@
         if(currentPage > 1) showPage(--currentPage);
     });
 
-    // 逆地址解析 → 显示城市
+    // 逆地址解析
     async function getAddress(lat, lng) {
         try {
             const res = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&apiKey=41972c34a06c47079d3365990c14c65d`);
@@ -572,7 +573,7 @@
         return "获取位置中";
     }
 
-    // 提交祝福 + 定位
+    // 提交祝福
     async function submitMessage(){
         const name = document.getElementById("name").value.trim();
         const content = document.getElementById("content").value.trim();
