@@ -473,22 +473,47 @@
 </div>
 
 <script>
+    // ========== 你的项目信息 ==========
+    const supabaseUrl = "https://pfwrrxoithqbwlrtlhnz.supabase.co";
+    const supabaseKey = "你的 Publishable key";
+    // ==================================
+
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
     let currentPage = 0;
     const totalPage = 5;
     const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 
-    // ========== 你的 Supabase 信息 ==========
-    const supabaseUrl = "https://pfwrrxoithqbwlrtlhnz.supabase.co";
-    const supabaseKey = "你的 Publishable key";
-    // =======================================
-
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-    function setBackground(n) {
-        if(n >= 1 && n <= 5) {
-            document.body.style.backgroundImage = `url(${backgrounds[n-1]})`;
-        } else {
-            document.body.style.backgroundImage = "none";
+    // 👇 关键修复：所有函数都定义在全局作用域
+    function goToHome(){
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page0').classList.add('active');
+        document.getElementById('navButtons').style.display = 'none';
+        currentPage = 0;
+    }
+    function goToVerify(){
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('verifyPage').classList.add('active');
+        document.getElementById('navButtons').style.display = 'none';
+    }
+    function goToFriend(){
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('friendPage').classList.add('active');
+        document.getElementById('navButtons').style.display = 'none';
+    }
+    function checkVerify(){
+        const val = document.getElementById('verifyPwd').value.trim();
+        if(val === "1880"){
+            showPage(1);
+        }else{
+            alert("密码不正确哦！");
+        }
+    }
+    function checkPwd(){
+        if(document.getElementById('pwdInput').value.trim() === "1880"){
+            document.getElementById('secret').style.display = "block";
+        }else{
+            alert("密码不对哦～");
         }
     }
 
@@ -496,7 +521,6 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page' + n).classList.add('active');
         currentPage = n;
-        setBackground(n);
 
         const navButtons = document.getElementById('navButtons');
         if(n >= 1 && n <= 5) {
@@ -514,43 +538,6 @@
             navButtons.style.display = 'none';
         }
         if (n === 2) loadMessages();
-    }
-
-    // 👇 关键修复：这三个函数直接定义在全局作用域
-    function goToHome(){
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('page0').classList.add('active');
-        document.getElementById('navButtons').style.display = 'none';
-        currentPage = 0;
-        setBackground(0);
-    }
-    function goToVerify(){
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('verifyPage').classList.add('active');
-        document.getElementById('navButtons').style.display = 'none';
-        setBackground(0);
-    }
-    function goToFriend(){
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('friendPage').classList.add('active');
-        document.getElementById('navButtons').style.display = 'none';
-        setBackground(0);
-    }
-
-    function checkVerify(){
-        const val = document.getElementById('verifyPwd').value.trim();
-        if(val === "1880"){
-            showPage(1);
-        }else{
-            alert("密码不正确哦！");
-        }
-    }
-    function checkPwd(){
-        if(document.getElementById('pwdInput').value.trim() === "1880"){
-            document.getElementById('secret').style.display = "block";
-        }else{
-            alert("密码不对哦～");
-        }
     }
 
     document.getElementById('nextBtn').addEventListener('click', () => {
@@ -623,8 +610,6 @@
         alert("已清空");
         loadMessages();
     }
-
-    setBackground(0);
 </script>
 </body>
 </html>
