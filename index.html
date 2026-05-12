@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快乐 · 专属惊喜</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -375,19 +373,17 @@
             <div class="cake-page">
                 <h1>🎂 祝你生日快乐 🎂</h1>
                 <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
-                <img class="cake-img" src="cake.jpg" alt="生日蛋糕" onError="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
-                <div id="cakeFallback" class="cake-fallback">🎂</div>
+                <div id="cakeFallback" class="cake-fallback" style="display:block;">🎂</div>
                 <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙（云端跨设备） -->
+    <!-- 2 留言墙（本地存储，秒反应） -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="message-wall" id="mainMessageWall">
-                <div class="loading">正在加载所有祝福...</div>
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
@@ -473,168 +469,120 @@
     let currentPage = 0;
     const totalPage = 5;
 
-    // Firebase 可用配置
-    const firebaseConfig = {
-        apiKey: "AIzaSyC9k1c6Gyv2kfK5Xa0x8J0LlYdQk1bVJ8M",
-        authDomain: "birthday-wishes-2026.firebaseapp.com",
-        projectId: "birthday-wishes-2026",
-        storageBucket: "birthday-wishes-2026.firebasestorage.app",
-        messagingSenderId: "751940310300",
-        appId: "1:751940310300:web:2c1a622d47a8f8a0e05d19"
-    };
-
-    // 初始化 Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const messagesRef = db.collection("birthday-wishes");
-
-    // 切换背景（无本地图片也正常显示）
-    function setBackground(n) {
-        if(n >= 1 && n <= 5) {
-            document.body.style.backgroundImage = "none";
-        } else {
-            document.body.style.backgroundImage = "none";
-            document.body.style.background = "linear-gradient(135deg, #e0f0ff, #f3e5ff)";
-        }
+    // 本地留言存储（无外网、秒提交、无任何报错）
+    function getMessages() {
+        const data = localStorage.getItem('birthdayMsgs');
+        return data ? JSON.parse(data) : [];
     }
 
-    // 显示指定页面
+    function addMessage(name, content) {
+        const list = getMessages();
+        list.unshift({ name, content });
+        localStorage.setItem('birthdayMsgs', JSON.stringify(list));
+    }
+
+    // 页面切换
     function showPage(n) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page' + n).classList.add('active');
         currentPage = n;
-        setBackground(n);
 
-        const navButtons = document.getElementById('navButtons');
-        if(n >= 1 && n <= 5) {
-            navButtons.style.display = 'block';
+        const nav = document.getElementById('navButtons');
+        if (n >= 1 && n <= 5) {
+            nav.style.display = 'block';
             document.getElementById('prevBtn').style.display = n === 1 ? 'none' : 'inline-block';
-            const nextBtn = document.getElementById('nextBtn');
-            if(n === totalPage) {
-                nextBtn.innerText = "已到最后一页";
-                nextBtn.disabled = true;
+            const next = document.getElementById('nextBtn');
+            if (n === totalPage) {
+                next.innerText = "已到最后一页";
+                next.disabled = true;
             } else {
-                nextBtn.innerText = "下一页";
-                nextBtn.disabled = false;
+                next.innerText = "下一页";
+                next.disabled = false;
             }
-            if(n === 2) loadCloudMessages();
+            if (n === 2) loadMessages();
         } else {
-            navButtons.style.display = 'none';
+            nav.style.display = 'none';
         }
     }
 
-    // 返回首页
-    function goToHome(){
+    function goToHome() {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page0').classList.add('active');
-        document.getElementById('navButtons').style.display = 'none';
         currentPage = 0;
-        setBackground(0);
     }
 
-    // 进入验证页
-    function goToVerify(){
+    function goToVerify() {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
-        document.getElementById('verifyPwd').value = "";
-        setBackground(0);
+        document.getElementById('verifyPwd').value = '';
     }
 
-    // 验证密码
-    function checkVerify(){
+    function checkVerify() {
         const val = document.getElementById('verifyPwd').value.trim();
-        if(val === "1880"){
-            showPage(1);
-        }else{
-            alert("密码不正确哦！");
-        }
+        if (val === '1880') showPage(1);
+        else alert('密码不正确哦！');
     }
 
-    // 进入朋友祝福页
-    function goToFriend(){
+    function goToFriend() {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
-        document.getElementById('name').value = "";
-        document.getElementById('content').value = "";
-        setBackground(0);
+        document.getElementById('name').value = '';
+        document.getElementById('content').value = '';
     }
 
-    // 翻页按钮事件
-    document.getElementById('nextBtn').addEventListener('click', () => {
-        if(currentPage < totalPage) {
-            showPage(++currentPage);
-        }
-    });
-    document.getElementById('prevBtn').addEventListener('click', () => {
-        if(currentPage > 1) {
-            showPage(--currentPage);
-        }
-    });
+    // 翻页
+    document.getElementById('nextBtn').onclick = () => {
+        if (currentPage < totalPage) showPage(++currentPage);
+    };
+    document.getElementById('prevBtn').onclick = () => {
+        if (currentPage > 1) showPage(--currentPage);
+    };
 
-    // 第4页密码游戏
-    function checkPwd(){
-        if(document.getElementById('pwdInput').value.trim() === "1880"){
-            document.getElementById('secret').style.display = "block";
-        }else{
-            alert("密码不对哦～");
+    // 解锁礼物
+    function checkPwd() {
+        if (document.getElementById('pwdInput').value.trim() === '1880') {
+            document.getElementById('secret').style.display = 'block';
+        } else {
+            alert('密码不对哦～');
         }
     }
 
-    // 提交祝福
-    async function submitMessage(){
-        let name = document.getElementById("name").value.trim();
-        let content = document.getElementById("content").value.trim();
-        if(!name || !content){
-            alert("请填写完整名字和祝福内容");
+    // 提交留言（秒反应）
+    function submitMessage() {
+        const name = document.getElementById('name').value.trim();
+        const content = document.getElementById('content').value.trim();
+        if (!name || !content) {
+            alert('请填写完整名字和祝福内容');
             return;
         }
-        try {
-            await messagesRef.add({
-                name: name,
-                content: content,
-                time: new Date()
-            });
-            alert("提交成功！祝福已上墙～");
-            document.getElementById("name").value = "";
-            document.getElementById("content").value = "";
-        } catch (err) {
-            alert("提交失败，请检查网络后重试");
-            console.error(err);
-        }
+        addMessage(name, content);
+        alert('提交成功！');
+        document.getElementById('name').value = '';
+        document.getElementById('content').value = '';
+        loadMessages();
     }
 
     // 加载留言
-    async function loadCloudMessages(){
-        let box = document.getElementById("mainMessageWall");
-        box.innerHTML = '<div class="loading">正在加载所有祝福...</div>';
-        try {
-            const snapshot = await messagesRef.orderBy("time", "desc").get();
-            let list = [];
-            snapshot.forEach(doc => {
-                list.push(doc.data());
-            });
-            box.innerHTML = "";
-            if(list.length === 0){
-                box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
-                return;
-            }
-            list.forEach(item => {
-                let div = document.createElement("div");
-                div.className = "message-card";
-                div.innerHTML = `
-                    <div class="msg-name">${item.name}</div>
-                    <p class="msg-text">${item.content}</p>
-                `;
-                box.appendChild(div);
-            });
-        } catch (err) {
-            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:red;">加载失败，请刷新页面重试</p>';
-            console.error(err);
-        }
-    }
+    function loadMessages() {
+        const box = document.getElementById('mainMessageWall');
+        const list = getMessages();
+        box.innerHTML = '';
 
-    // 初始化
-    setBackground(0);
+        if (list.length === 0) {
+            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;">暂时还没有祝福，快来写下第一条吧～</p>';
+            return;
+        }
+
+        list.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'message-card';
+            div.innerHTML = `
+                <div class="msg-name">${item.name}</div>
+                <p class="msg-text">${item.content}</p>
+            `;
+            box.appendChild(div);
+        });
+    }
 </script>
 </body>
 </html>
