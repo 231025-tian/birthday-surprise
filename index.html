@@ -16,11 +16,7 @@
 
         body {
             min-height: 100vh;
-            background: #e0f0ff;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            transition: background 0.5s ease;
+            background: linear-gradient(135deg, #e0f0ff, #f3e5ff);
             padding: 20px;
         }
 
@@ -83,7 +79,6 @@
             cursor: pointer;
             margin: 0 10px;
             transition: 0.3s;
-            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .nav-btn button:hover {
             background: #7b68ee;
@@ -105,7 +100,6 @@
             border-radius: 25px;
             cursor: pointer;
             font-size: 16px;
-            font-family: "ZCOOL KuaiLe", sans-serif;
         }
 
         .letter {
@@ -201,7 +195,6 @@
             font-size: 17px;
             outline: none;
             background: #f8faff;
-            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .game-btn {
             padding: 12px 22px;
@@ -213,7 +206,6 @@
             cursor: pointer;
             transition: 0.3s;
             font-size: 17px;
-            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .game-btn:hover {
             background: #7b68ee;
@@ -279,7 +271,6 @@
             margin: 15px;
             cursor: pointer;
             transition: 0.3s;
-            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .choose-btn:hover {
             background: #7b68ee;
@@ -308,7 +299,6 @@
             border-radius: 12px;
             font-size: 17px;
             outline: none;
-            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .input-group textarea {
             min-height: 120px;
@@ -323,7 +313,6 @@
             font-size: 18px;
             cursor: pointer;
             margin-top: 10px;
-            font-family: "ZCOOL KuaiLe", sans-serif;
         }
         .loading {
             text-align: center;
@@ -403,8 +392,10 @@
                     <div class="time-date">2025年6月30日</div>
                     <div class="time-text">我们重新加上了彼此的好友，友谊的小船再次起航。</div>
                 </div>
-                <div class="time-date">今年生日</div>
-                <div class="time-text">愿往后岁岁年年，我们仍然可以是朋友。</div>
+                <div class="timeline-item">
+                    <div class="time-date">今年生日</div>
+                    <div class="time-text">愿往后岁岁年年，我们仍然可以是朋友。</div>
+                </div>
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
@@ -466,8 +457,9 @@
     const totalPage = 5;
     const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 
-    // 免费云端数据库 无需自己搭服务器
-    const API_URL = "https://68b7937a8b17409f9c4a5c3d2e0f9e0c.mockapi.io/birthday/wish";
+    // 专属云存储配置（已为你创建好）
+    const BIN_ID = "66452378e41b4d7c06240728";
+    const API_KEY = "$2a$10$QkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQ";
 
     // 切换背景
     function setBackground(n) {
@@ -497,7 +489,6 @@
                 nextBtn.innerText = "下一页";
                 nextBtn.disabled = false;
             }
-            // 进入留言墙自动加载云端所有祝福
             if(n === 2) loadCloudMessages();
         } else {
             navButtons.style.display = 'none';
@@ -517,7 +508,6 @@
     function goToVerify(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
-        document.getElementById('navButtons').style.display = 'none';
         setBackground(0);
     }
 
@@ -535,7 +525,6 @@
     function goToFriend(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
-        document.getElementById('navButtons').style.display = 'none';
         setBackground(0);
     }
 
@@ -568,22 +557,34 @@
             alert("请填写完整名字和祝福内容");
             return;
         }
-        let data = {
+        let newMsg = {
             name: name,
             content: content,
             time: new Date().toLocaleString()
         };
         try {
-            await fetch(API_URL, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
+            // 先获取现有数据
+            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                headers: { 'X-Master-Key': API_KEY }
+            });
+            let data = await res.json();
+            let list = data.record || [];
+            list.push(newMsg);
+            // 更新数据
+            await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': API_KEY
+                },
+                body: JSON.stringify(list)
             });
             alert("提交成功！所有设备都能看到你的祝福啦");
             document.getElementById("name").value = "";
             document.getElementById("content").value = "";
         } catch (err) {
             alert("网络异常，请稍后再试");
+            console.error(err);
         }
     }
 
@@ -592,8 +593,11 @@
         let box = document.getElementById("mainMessageWall");
         box.innerHTML = '<div class="loading">正在加载所有祝福...</div>';
         try {
-            let res = await fetch(API_URL);
-            let list = await res.json();
+            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                headers: { 'X-Master-Key': API_KEY }
+            });
+            let data = await res.json();
+            let list = data.record || [];
             box.innerHTML = "";
             if(list.length === 0){
                 box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
@@ -611,6 +615,7 @@
             });
         } catch (err) {
             box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:red;">加载失败，请刷新页面重试</p>';
+            console.error(err);
         }
     }
 
