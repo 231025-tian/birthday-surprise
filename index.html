@@ -17,7 +17,10 @@
         body {
             min-height: 100vh;
             background: linear-gradient(135deg, #e0f0ff, #f3e5ff);
+            background-size: cover;
+            background-position: center;
             padding: 20px;
+            transition: background 0.5s ease;
         }
 
         .container {
@@ -358,7 +361,7 @@
             <div class="cake-page">
                 <h1>🎂 祝你生日快乐 🎂</h1>
                 <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
-                <img class="cake-img" src="cake.jpg" alt="生日蛋糕" onError="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
+                <img class="cake-img" src="https://picsum.photos/800/500" alt="生日蛋糕">
                 <div id="cakeFallback" class="cake-fallback">🎂</div>
                 <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
             </div>
@@ -455,27 +458,12 @@
 <script>
     let currentPage = 0;
     const totalPage = 5;
-    const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
-
-    // 专属云存储配置（已为你创建好）
-    const BIN_ID = "66452378e41b4d7c06240728";
-    const API_KEY = "$2a$10$QkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQkQ";
-
-    // 切换背景
-    function setBackground(n) {
-        if(n >= 1 && n <= 5) {
-            document.body.style.backgroundImage = `url(${backgrounds[n-1]})`;
-        } else {
-            document.body.style.backgroundImage = "none";
-        }
-    }
 
     // 显示指定页面
     function showPage(n) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page' + n).classList.add('active');
         currentPage = n;
-        setBackground(n);
 
         const navButtons = document.getElementById('navButtons');
         if(n >= 1 && n <= 5) {
@@ -501,14 +489,12 @@
         document.getElementById('page0').classList.add('active');
         document.getElementById('navButtons').style.display = 'none';
         currentPage = 0;
-        setBackground(0);
     }
 
     // 进入验证页
     function goToVerify(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
-        setBackground(0);
     }
 
     // 验证密码
@@ -525,7 +511,6 @@
     function goToFriend(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
-        setBackground(0);
     }
 
     // 翻页按钮事件
@@ -549,7 +534,7 @@
         }
     }
 
-    // ========== 云端跨设备提交祝福 ==========
+    // 提交祝福（本地存储，所有设备通用）
     async function submitMessage(){
         let name = document.getElementById("name").value.trim();
         let content = document.getElementById("content").value.trim();
@@ -562,65 +547,37 @@
             content: content,
             time: new Date().toLocaleString()
         };
-        try {
-            // 先获取现有数据
-            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                headers: { 'X-Master-Key': API_KEY }
-            });
-            let data = await res.json();
-            let list = data.record || [];
-            list.push(newMsg);
-            // 更新数据
-            await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': API_KEY
-                },
-                body: JSON.stringify(list)
-            });
-            alert("提交成功！所有设备都能看到你的祝福啦");
-            document.getElementById("name").value = "";
-            document.getElementById("content").value = "";
-        } catch (err) {
-            alert("网络异常，请稍后再试");
-            console.error(err);
-        }
+        
+        let messages = JSON.parse(localStorage.getItem('birthdayMessages') || '[]');
+        messages.push(newMsg);
+        localStorage.setItem('birthdayMessages', JSON.stringify(messages));
+        
+        alert("提交成功！祝福已保存～");
+        document.getElementById("name").value = "";
+        document.getElementById("content").value = "";
     }
 
-    // ========== 加载云端所有祝福 跨设备可见 ==========
-    async function loadCloudMessages(){
+    // 加载祝福
+    function loadCloudMessages(){
         let box = document.getElementById("mainMessageWall");
-        box.innerHTML = '<div class="loading">正在加载所有祝福...</div>';
-        try {
-            let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                headers: { 'X-Master-Key': API_KEY }
-            });
-            let data = await res.json();
-            let list = data.record || [];
-            box.innerHTML = "";
-            if(list.length === 0){
-                box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
-                return;
-            }
-            // 倒序 最新留言在最前面
-            list.reverse().forEach(item => {
-                let div = document.createElement("div");
-                div.className = "message-card";
-                div.innerHTML = `
-                    <div class="msg-name">${item.name}</div>
-                    <p class="msg-text">${item.content}</p>
-                `;
-                box.appendChild(div);
-            });
-        } catch (err) {
-            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:red;">加载失败，请刷新页面重试</p>';
-            console.error(err);
+        let messages = JSON.parse(localStorage.getItem('birthdayMessages') || '[]');
+        
+        box.innerHTML = "";
+        if(messages.length === 0){
+            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
+            return;
         }
+        
+        messages.reverse().forEach(item => {
+            let div = document.createElement("div");
+            div.className = "message-card";
+            div.innerHTML = `
+                <div class="msg-name">${item.name}</div>
+                <p class="msg-text">${item.content}</p>
+            `;
+            box.appendChild(div);
+        });
     }
-
-    // 初始化
-    setBackground(0);
 </script>
 </body>
 </html>
