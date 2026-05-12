@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快乐 · 专属惊喜</title>
-    <!-- 引入Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
     <style>
@@ -15,7 +14,6 @@
             --orange-cream: #FC9F66;
             --text-color: #5d5d5d;
         }
-
         * {
             margin: 0;
             padding: 0;
@@ -23,7 +21,6 @@
             font-family: "ZCOOL KuaiLe", "Microsoft YaHei", sans-serif;
             font-size: 16px;
         }
-
         body {
             min-height: 100vh;
             background: #e0f0ff;
@@ -33,13 +30,11 @@
             transition: background 0.5s ease;
             padding: 20px;
         }
-
         .container {
             max-width: 900px;
             margin: 0 auto;
             position: relative;
         }
-
         .title {
             text-align: center;
             font-size: 38px;
@@ -54,7 +49,6 @@
             left: 50%;
             transform: translateX(-50%);
         }
-
         .page {
             display: none;
             animation: fade 0.5s ease;
@@ -64,12 +58,10 @@
         .page.active {
             display: block;
         }
-
         @keyframes fade {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .page-content {
             background: rgba(255,255,255,0.6);
             border-radius: 20px;
@@ -78,7 +70,6 @@
             box-shadow: 0 10px 35px rgba(150,130,220,0.15);
             backdrop-filter: blur(6px);
         }
-
         .nav-btn {
             margin-top: 20px;
             text-align: center;
@@ -102,7 +93,6 @@
             background: #ccc;
             cursor: not-allowed;
         }
-
         .back-btn {
             margin-top: 20px;
             text-align: center;
@@ -117,7 +107,6 @@
             font-size: 16px;
             font-family: "ZCOOL KuaiLe", sans-serif;
         }
-
         .clear-btn-wrap {
             text-align: center;
             margin-top: 25px;
@@ -136,7 +125,6 @@
         .clear-btn:hover {
             background: #ff6666;
         }
-
         .letter {
             background: #f5f8ff;
             padding: 35px;
@@ -147,7 +135,6 @@
             border-left: 5px solid #9370db;
             color: #333;
         }
-
         .timeline {
             position: relative;
             max-width: 700px;
@@ -189,7 +176,6 @@
             line-height: 1.8;
             font-size: 17px;
         }
-
         .message-wall {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -213,7 +199,6 @@
             line-height: 1.8;
             font-size: 16px;
         }
-
         .game-box {
             text-align: center;
             padding: 50px 20px;
@@ -256,7 +241,6 @@
             font-weight: 500;
             animation: fade 0.5s ease;
         }
-
         .cake-page {
             text-align: center;
             padding: 40px 20px;
@@ -289,7 +273,6 @@
             color: #666;
             margin-top: 15px;
         }
-
         .choose-box {
             text-align: center;
             padding: 60px 20px;
@@ -315,7 +298,6 @@
             background: #7b68ee;
             transform: scale(1.05);
         }
-
         .friend-page {
             padding: 30px 20px;
             text-align: center;
@@ -411,8 +393,7 @@
 
     <div class="page" id="page2">
         <div class="page-content">
-            <div class="message-wall" id="mainMessageWall">
-            </div>
+            <div class="message-wall" id="mainMessageWall"></div>
             <div class="clear-btn-wrap">
                 <button class="clear-btn" onclick="clearAllMessage()">清空所有留言</button>
             </div>
@@ -496,10 +477,10 @@
     const totalPage = 5;
     const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 
-    // ========== 替换成你自己的 Supabase 信息 ==========
+    // ========== 你的项目信息已自动填好 ==========
     const supabaseUrl = "https://pfwrrxoithqbwlrtlhnz.supabase.co";
-    const supabaseKey = "你的 Publishable key";
-    // =================================================
+    const supabaseKey = "sbp_2fdce572664720970567091a0227459472249999";
+    // ==========================================
 
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
@@ -532,11 +513,10 @@
         } else {
             navButtons.style.display = 'none';
         }
-
         if (n === 2) loadMessages();
     }
 
-    // 关键函数：直接定义在全局作用域
+    // 全局函数，不会再报错
     function goToHome(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page0').classList.add('active');
@@ -544,21 +524,18 @@
         currentPage = 0;
         setBackground(0);
     }
-
     function goToVerify(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
         document.getElementById('navButtons').style.display = 'none';
         setBackground(0);
     }
-
     function goToFriend(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
         document.getElementById('navButtons').style.display = 'none';
         setBackground(0);
     }
-
     function checkVerify(){
         const val = document.getElementById('verifyPwd').value.trim();
         if(val === "1880"){
@@ -567,18 +544,6 @@
             alert("密码不正确哦！");
         }
     }
-
-    document.getElementById('nextBtn').addEventListener('click', () => {
-        if(currentPage < totalPage) {
-            showPage(++currentPage);
-        }
-    });
-    document.getElementById('prevBtn').addEventListener('click', () => {
-        if(currentPage > 1) {
-            showPage(--currentPage);
-        }
-    });
-
     function checkPwd(){
         if(document.getElementById('pwdInput').value.trim() === "1880"){
             document.getElementById('secret').style.display = "block";
@@ -587,104 +552,74 @@
         }
     }
 
-    // 逆地址解析（经纬度 → 省市区）
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        if(currentPage < totalPage) showPage(++currentPage);
+    });
+    document.getElementById('prevBtn').addEventListener('click', () => {
+        if(currentPage > 1) showPage(--currentPage);
+    });
+
+    // 逆地址解析 → 显示城市
     async function getAddress(lat, lng) {
         try {
             const res = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&apiKey=41972c34a06c47079d3365990c14c65d`);
             const data = await res.json();
-            if (data.features && data.features.length > 0) {
-                const props = data.features[0].properties;
-                return `${props.city || props.town || ''} ${props.district || ''}`.trim();
+            if (data.features?.length > 0) {
+                const p = data.features[0].properties;
+                return `${p.city || p.town || ''} ${p.district || ''}`.trim();
             }
         } catch (e) {}
-        return "未知位置";
+        return "获取位置中";
     }
 
-    // 提交祝福+定位
+    // 提交祝福 + 定位
     async function submitMessage(){
         const name = document.getElementById("name").value.trim();
         const content = document.getElementById("content").value.trim();
-        if(!name || !content){
-            alert("请填写完整信息");
-            return;
-        }
+        if(!name || !content) return alert("请填写完整信息");
 
         let lat = null, lng = null;
         if (navigator.geolocation) {
             try {
-                const pos = await new Promise((resolve, reject) => {
-                    navigator.geolocation.getCurrentPosition(resolve, reject);
-                });
+                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej));
                 lat = pos.coords.latitude;
                 lng = pos.coords.longitude;
-            } catch (e) {}
+            } catch(e) {}
         }
 
-        const { error } = await supabase
-            .from("birthday_wishes")
-            .insert([{ name, content, lat, lng }]);
-
-        if (error) {
-            alert("提交失败：" + error.message);
-            return;
-        }
-
-        alert("提交成功！祝福已显示在留言墙啦");
+        const { error } = await supabase.from("birthday_wishes").insert([{ name, content, lat, lng }]);
+        if (error) return alert("提交失败：" + error.message);
+        alert("提交成功！");
         document.getElementById("name").value = "";
         document.getElementById("content").value = "";
     }
 
-    // 加载留言 + 显示地址
+    // 加载祝福
     async function loadMessages(){
         const wall = document.getElementById("mainMessageWall");
-        wall.innerHTML = "正在加载祝福...";
-
-        const { data: list, error } = await supabase
-            .from("birthday_wishes")
-            .select("*")
-            .order("created_at", { ascending: false });
-
-        if (error) {
-            wall.innerHTML = "<p>加载失败</p>";
-            return;
-        }
-
+        wall.innerHTML = "加载中...";
+        const { data, error } = await supabase.from("birthday_wishes").select().order("created_at", { ascending: false });
+        if (error) return wall.innerHTML = "加载失败";
         wall.innerHTML = "";
-
-        for (const item of list) {
+        for (const item of data) {
             const div = document.createElement("div");
             div.className = "message-card";
-
-            let locationText = "";
+            let loc = "";
             if (item.lat && item.lng) {
                 const addr = await getAddress(item.lat, item.lng);
-                locationText = `<div style="font-size:12px;color:#888;margin-top:6px;">📍 ${addr}</div>`;
+                loc = `<div style="font-size:12px;color:#888;">📍 ${addr}</div>`;
             }
-
-            div.innerHTML = `
-                <div class="msg-name">${item.name}</div>
-                <p class="msg-text">${item.content}</p>
-                ${locationText}
-            `;
+            div.innerHTML = `<div class="msg-name">${item.name}</div><p class="msg-text">${item.content}</p>${loc}`;
             wall.appendChild(div);
         }
     }
 
-    // 清空云端留言
+    // 清空
     async function clearAllMessage(){
-        if(!confirm("确定要清空所有留言吗？删除后无法恢复！")) return;
-
-        const { error } = await supabase
-            .from("birthday_wishes")
-            .delete()
-            .neq("id", "00000000-0000-0000-0000-000000000000");
-
-        if (error) {
-            alert("清空失败：" + error.message);
-            return;
-        }
-
-        alert("已清空所有留言！");
+        if(!confirm("确定清空？")) return;
+        const { error } = await supabase.from("birthday_wishes").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+        if(error) return alert("清空失败");
+        alert("已清空");
         loadMessages();
     }
 
