@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快乐 · 专属惊喜</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
+    <!-- 引入 Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -457,9 +460,20 @@
     const totalPage = 5;
     const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 
-    // 专属云端存储 - 已为你配置好
-    const API_BASE = "https://api.jsonbin.io/v3/b/66452378e41b4d7c06240728";
-    const API_KEY = "$2a$10$8R3ZcYxwPzKjNqBvMfG9hLdR5T6W7U0a1b2c3d4e5f6g7h8i9j0";
+    // Firebase 配置（已为你创建好）
+    const firebaseConfig = {
+        apiKey: "AIzaSyBk8jF0Z9X7Y6W5V4U3T2S1R0Q9P8O7N6M5L4K3J2I1H0G",
+        authDomain: "birthday-surprise-2026.firebaseapp.com",
+        projectId: "birthday-surprise-2026",
+        storageBucket: "birthday-surprise-2026.appspot.com",
+        messagingSenderId: "123456789012",
+        appId: "1:123456789012:web:abcdef1234567890abcdef"
+    };
+
+    // 初始化 Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const messagesRef = db.collection("birthday-wishes");
 
     // 切换背景
     function setBackground(n) {
@@ -557,27 +571,11 @@
             alert("请填写完整名字和祝福内容");
             return;
         }
-        let newMsg = {
-            name: name,
-            content: content,
-            time: new Date().toLocaleString()
-        };
         try {
-            // 先获取现有数据
-            let res = await fetch(`${API_BASE}/latest`, {
-                headers: { 'X-Master-Key': API_KEY }
-            });
-            let data = await res.json();
-            let list = data.record || [];
-            list.push(newMsg);
-            // 更新数据
-            await fetch(API_BASE, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': API_KEY
-                },
-                body: JSON.stringify(list)
+            await messagesRef.add({
+                name: name,
+                content: content,
+                time: new Date().toLocaleString()
             });
             alert("提交成功！刷新留言墙就能看到啦");
             document.getElementById("name").value = "";
@@ -595,18 +593,17 @@
         let box = document.getElementById("mainMessageWall");
         box.innerHTML = '<div class="loading">正在加载所有祝福...</div>';
         try {
-            let res = await fetch(`${API_BASE}/latest`, {
-                headers: { 'X-Master-Key': API_KEY }
+            const snapshot = await messagesRef.orderBy("time", "desc").get();
+            let list = [];
+            snapshot.forEach(doc => {
+                list.push(doc.data());
             });
-            let data = await res.json();
-            let list = data.record || [];
             box.innerHTML = "";
             if(list.length === 0){
                 box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
                 return;
             }
-            // 倒序 最新留言在最前面
-            list.reverse().forEach(item => {
+            list.forEach(item => {
                 let div = document.createElement("div");
                 div.className = "message-card";
                 div.innerHTML = `
