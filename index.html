@@ -535,38 +535,63 @@
     }
 
     // 提交祝福（本地存储，所有设备通用）
-    async function submitMessage(){
-        let name = document.getElementById("name").value.trim();
-        let content = document.getElementById("content").value.trim();
-        if(!name || !content){
-            alert("请填写完整名字和祝福内容");
-            return;
-        }
-        let newMsg = {
-            name: name,
-            content: content,
-            time: new Date().toLocaleString()
-        };
-        
-        let messages = JSON.parse(localStorage.getItem('birthdayMessages') || '[]');
-        messages.push(newMsg);
-        localStorage.setItem('birthdayMessages', JSON.stringify(messages));
-        
-        alert("提交成功！祝福已保存～");
-        document.getElementById("name").value = "";
-        document.getElementById("content").value = "";
+   // ========== 新版：本地储存祝福（和解密页同款机制） ==========
+function submitMessage() {
+    let name = document.getElementById("name").value.trim();
+    let content = document.getElementById("content").value.trim();
+
+    if (!name || !content) {
+        alert("请填写完整名字和祝福内容");
+        return;
     }
 
-    // 加载祝福
-    function loadCloudMessages(){
-        let box = document.getElementById("mainMessageWall");
-        let messages = JSON.parse(localStorage.getItem('birthdayMessages') || '[]');
-        
-        box.innerHTML = "";
-        if(messages.length === 0){
-            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
-            return;
-        }
+    // 防重复提交（和解密页一样逻辑）
+    if (localStorage.getItem('hasSubmitted')) {
+        alert("你已经送过祝福啦，感谢你的心意！");
+        return;
+    }
+
+    let newMsg = {
+        name: name,
+        content: content,
+        time: new Date().toLocaleString()
+    };
+
+    // 读取已有祝福
+    let messages = JSON.parse(localStorage.getItem('birthdayMessages') || '[]');
+    messages.push(newMsg);
+
+    // 保存到本地
+    localStorage.setItem('birthdayMessages', JSON.stringify(messages));
+    localStorage.setItem('hasSubmitted', 'true'); // 标记已提交
+
+    alert("提交成功！来自你的祝福已成功送达！");
+    document.getElementById("name").value = "";
+    document.getElementById("content").value = "";
+}
+
+// ========== 加载所有祝福 ==========
+function loadCloudMessages() {
+    let box = document.getElementById("mainMessageWall");
+    let messages = JSON.parse(localStorage.getItem('birthdayMessages') || '[]');
+
+    box.innerHTML = "";
+    if (messages.length === 0) {
+        box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
+        return;
+    }
+
+    // 倒序展示：最新的在最前面
+    messages.reverse().forEach(item => {
+        let div = document.createElement("div");
+        div.className = "message-card";
+        div.innerHTML = `
+            <div class="msg-name">${item.name}</div>
+            <p class="msg-text">${item.content}</p>
+        `;
+        box.appendChild(div);
+    });
+}
         
         messages.reverse().forEach(item => {
             let div = document.createElement("div");
