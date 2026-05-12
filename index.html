@@ -117,6 +117,26 @@
             font-family: "ZCOOL KuaiLe", sans-serif;
         }
 
+        /* 清空留言按钮样式 */
+        .clear-btn-wrap {
+            text-align: center;
+            margin-top: 25px;
+        }
+        .clear-btn {
+            padding: 10px 26px;
+            background: #ff8888;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.3s;
+            font-family: "ZCOOL KuaiLe", sans-serif;
+        }
+        .clear-btn:hover {
+            background: #ff6666;
+        }
+
         .letter {
             background: #f5f8ff;
             padding: 35px;
@@ -394,11 +414,15 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙（朋友提交的祝福会显示在这里，已清空所有固定内容） -->
+    <!-- 2 留言墙 -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="message-wall" id="mainMessageWall">
-                <!-- 这里现在是空的，只会显示朋友提交的祝福 -->
+                <!-- 空白留言墙 -->
+            </div>
+            <!-- 一键清空留言按钮 -->
+            <div class="clear-btn-wrap">
+                <button class="clear-btn" onclick="clearAllMessage()">清空所有留言</button>
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
@@ -595,11 +619,12 @@
         alert("提交成功！祝福已显示在留言墙啦");
         document.getElementById("name").value = "";
         document.getElementById("content").value = "";
+        loadMessages();
     }
 
     // 加载朋友的祝福到留言墙
     function loadMessages(){
-        // 每次加载前先清空留言墙，避免重复或旧内容
+        // 每次加载先清空容器
         document.getElementById("mainMessageWall").innerHTML = "";
         let list = getMessages();
         let box = document.getElementById("mainMessageWall");
@@ -609,6 +634,15 @@
             div.innerHTML = `<div class="msg-name">${item.name}</div><p class="msg-text">${item.content}</p>`;
             box.appendChild(div);
         });
+    }
+
+    // 一键清空所有留言
+    function clearAllMessage(){
+        if(confirm("确定要清空所有留言吗？删除后无法恢复！")){
+            localStorage.removeItem("birthdayMessages");
+            document.getElementById("mainMessageWall").innerHTML = "";
+            alert("已清空所有留言！");
+        }
     }
 
     // 初始化
