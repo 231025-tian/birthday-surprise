@@ -18,10 +18,6 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #e0f0ff, #f3e5ff);
             padding: 20px;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            transition: background 0.5s ease;
         }
 
         .container {
@@ -105,9 +101,6 @@
             cursor: pointer;
             font-size: 16px;
         }
-        .back-btn button:hover {
-            background: #93b0e0;
-        }
 
         .letter {
             background: #f5f8ff;
@@ -172,10 +165,6 @@
             padding: 22px;
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(147,112,219,0.1);
-            transition: 0.3s;
-        }
-        .message-card:hover {
-            transform: translateY(-3px);
         }
         .msg-name {
             color: #7b68ee;
@@ -324,10 +313,6 @@
             font-size: 18px;
             cursor: pointer;
             margin-top: 10px;
-            transition: 0.3s;
-        }
-        .submit-btn:hover {
-            background: #7b68ee;
         }
         .loading {
             text-align: center;
@@ -358,7 +343,7 @@
         <div class="page-content">
             <div class="game-box">
                 <h2>🔐 请输入专属密码</h2>
-                <input type="password" class="game-input" id="verifyPwd" placeholder="请输入密码" onkeydown="if(event.key==='Enter')checkVerify()">
+                <input type="text" class="game-input" id="verifyPwd" placeholder="请输入密码">
                 <button class="game-btn" onclick="checkVerify()">验证进入</button>
             </div>
             <div class="back-btn">
@@ -373,17 +358,19 @@
             <div class="cake-page">
                 <h1>🎂 祝你生日快乐 🎂</h1>
                 <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
-                <div id="cakeFallback" class="cake-fallback" style="display:block;">🎂</div>
+                <img class="cake-img" src="cake.jpg" alt="生日蛋糕" onError="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
+                <div id="cakeFallback" class="cake-fallback">🎂</div>
                 <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙（本地存储，秒反应） -->
+    <!-- 2 留言墙（本地版） -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="message-wall" id="mainMessageWall">
+                <div class="loading">正在加载所有祝福...</div>
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
@@ -420,7 +407,7 @@
             <div class="game-box">
                 <h2>解锁专属小惊喜 🔐</h2>
                 <p style="margin:15px 0; color:#666; font-size:17px;">输入专属密码，查看小惊喜</p>
-                <input type="password" class="game-input" id="pwdInput" placeholder="请输入密码" onkeydown="if(event.key==='Enter')checkPwd()">
+                <input type="text" class="game-input" id="pwdInput" placeholder="请输入密码">
                 <button class="game-btn" onclick="checkPwd()">立即解锁</button>
                 <div class="secret-msg" id="secret">✨ 密码正确啦！记得凭此页面截图领取生日礼物哦 ✨</div>
             </div>
@@ -468,114 +455,136 @@
 <script>
     let currentPage = 0;
     const totalPage = 5;
+    const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 
-    // 本地留言存储（无外网、秒提交、无任何报错）
+    // 本地留言存储
     function getMessages() {
-        const data = localStorage.getItem('birthdayMsgs');
+        const data = localStorage.getItem('birthday-wishes');
         return data ? JSON.parse(data) : [];
     }
-
-    function addMessage(name, content) {
-        const list = getMessages();
-        list.unshift({ name, content });
-        localStorage.setItem('birthdayMsgs', JSON.stringify(list));
+    function saveMessage(name, content) {
+        const msgs = getMessages();
+        msgs.unshift({ name, content, time: new Date().toLocaleString() });
+        localStorage.setItem('birthday-wishes', JSON.stringify(msgs));
     }
 
-    // 页面切换
+    // 切换背景
+    function setBackground(n) {
+        if(n >= 1 && n <= 5) {
+            document.body.style.backgroundImage = `url(${backgrounds[n-1]})`;
+        } else {
+            document.body.style.backgroundImage = "none";
+        }
+    }
+
+    // 显示指定页面
     function showPage(n) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page' + n).classList.add('active');
         currentPage = n;
+        setBackground(n);
 
-        const nav = document.getElementById('navButtons');
-        if (n >= 1 && n <= 5) {
-            nav.style.display = 'block';
+        const navButtons = document.getElementById('navButtons');
+        if(n >= 1 && n <= 5) {
+            navButtons.style.display = 'block';
             document.getElementById('prevBtn').style.display = n === 1 ? 'none' : 'inline-block';
-            const next = document.getElementById('nextBtn');
-            if (n === totalPage) {
-                next.innerText = "已到最后一页";
-                next.disabled = true;
+            const nextBtn = document.getElementById('nextBtn');
+            if(n === totalPage) {
+                nextBtn.innerText = "已到最后一页";
+                nextBtn.disabled = true;
             } else {
-                next.innerText = "下一页";
-                next.disabled = false;
+                nextBtn.innerText = "下一页";
+                nextBtn.disabled = false;
             }
-            if (n === 2) loadMessages();
+            if(n === 2) loadCloudMessages();
         } else {
-            nav.style.display = 'none';
+            navButtons.style.display = 'none';
         }
     }
 
-    function goToHome() {
+    // 返回首页
+    function goToHome(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page0').classList.add('active');
+        document.getElementById('navButtons').style.display = 'none';
         currentPage = 0;
+        setBackground(0);
     }
 
-    function goToVerify() {
+    // 进入验证页
+    function goToVerify(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
-        document.getElementById('verifyPwd').value = '';
+        setBackground(0);
     }
 
-    function checkVerify() {
+    // 验证密码
+    function checkVerify(){
         const val = document.getElementById('verifyPwd').value.trim();
-        if (val === '1880') showPage(1);
-        else alert('密码不正确哦！');
+        if(val === "1880"){
+            showPage(1);
+        }else{
+            alert("密码不正确哦！");
+        }
     }
 
-    function goToFriend() {
+    // 进入朋友祝福页
+    function goToFriend(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
-        document.getElementById('name').value = '';
-        document.getElementById('content').value = '';
+        setBackground(0);
     }
 
-    // 翻页
-    document.getElementById('nextBtn').onclick = () => {
-        if (currentPage < totalPage) showPage(++currentPage);
-    };
-    document.getElementById('prevBtn').onclick = () => {
-        if (currentPage > 1) showPage(--currentPage);
-    };
+    // 翻页按钮事件
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        if(currentPage < totalPage) {
+            showPage(++currentPage);
+        }
+    });
+    document.getElementById('prevBtn').addEventListener('click', () => {
+        if(currentPage > 1) {
+            showPage(--currentPage);
+        }
+    });
 
-    // 解锁礼物
-    function checkPwd() {
-        if (document.getElementById('pwdInput').value.trim() === '1880') {
-            document.getElementById('secret').style.display = 'block';
-        } else {
-            alert('密码不对哦～');
+    // 第4页密码游戏
+    function checkPwd(){
+        if(document.getElementById('pwdInput').value.trim() === "1880"){
+            document.getElementById('secret').style.display = "block";
+        }else{
+            alert("密码不对哦～");
         }
     }
 
-    // 提交留言（秒反应）
-    function submitMessage() {
-        const name = document.getElementById('name').value.trim();
-        const content = document.getElementById('content').value.trim();
-        if (!name || !content) {
-            alert('请填写完整名字和祝福内容');
+    // 提交祝福
+    function submitMessage(){
+        let name = document.getElementById("name").value.trim();
+        let content = document.getElementById("content").value.trim();
+        if(!name || !content){
+            alert("请填写完整名字和祝福内容");
             return;
         }
-        addMessage(name, content);
-        alert('提交成功！');
-        document.getElementById('name').value = '';
-        document.getElementById('content').value = '';
-        loadMessages();
+        saveMessage(name, content);
+        alert("提交成功！刷新留言墙就能看到啦");
+        document.getElementById("name").value = "";
+        document.getElementById("content").value = "";
+        loadCloudMessages();
     }
 
     // 加载留言
-    function loadMessages() {
-        const box = document.getElementById('mainMessageWall');
-        const list = getMessages();
-        box.innerHTML = '';
-
-        if (list.length === 0) {
-            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;">暂时还没有祝福，快来写下第一条吧～</p>';
+    function loadCloudMessages(){
+        let box = document.getElementById("mainMessageWall");
+        box.innerHTML = '<div class="loading">正在加载所有祝福...</div>';
+        
+        let list = getMessages();
+        box.innerHTML = "";
+        if(list.length === 0){
+            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
             return;
         }
-
         list.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'message-card';
+            let div = document.createElement("div");
+            div.className = "message-card";
             div.innerHTML = `
                 <div class="msg-name">${item.name}</div>
                 <p class="msg-text">${item.content}</p>
@@ -583,6 +592,9 @@
             box.appendChild(div);
         });
     }
+
+    // 初始化
+    setBackground(0);
 </script>
 </body>
 </html>
