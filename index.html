@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快乐 · 专属惊喜</title>
-    <link rel="stylesheet" href="https://kkgithub.com/extdomains/fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -458,7 +458,7 @@
     const totalPage = 5;
     const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 
-    // ========== 替换成 Supabase 云端储存 ==========
+    // Supabase 配置
     const SUPABASE_URL = "https://zgakbjoydgukzynvcioy.supabase.co";
     const SUPABASE_KEY = "sb_publishable_PfUCXw3-X2mJCU-J2u7bUw_sMOqjKMI";
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -506,14 +506,14 @@
         setBackground(0);
     }
 
-    // 进入验证页（修复了这个函数）
+    // 进入验证页（已定义）
     function goToVerify(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
         setBackground(0);
     }
 
-    // 进入朋友祝福页（修复了这个函数）
+    // 进入朋友祝福页（已定义）
     function goToFriend(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
@@ -551,7 +551,7 @@
         }
     }
 
-    // ========== 提交祝福（Supabase 版本，和你新代码格式完全一致） ==========
+    // 提交祝福（Supabase）
     async function submitMessage() {
         let name = document.getElementById("name").value.trim();
         let content = document.getElementById("content").value.trim();
@@ -561,14 +561,12 @@
             return;
         }
 
-        // 防重复提交
         if (localStorage.getItem('hasSubmittedWish')) {
             alert("你已经提交过祝福啦，感谢心意！");
             return;
         }
 
         try {
-            // 存入 Supabase，格式和你新代码完全一样
             const { error } = await supabase.from('birthday-wishes').insert([
                 {
                     name: name,
@@ -591,7 +589,7 @@
         }
     }
 
-    // ========== 加载祝福（Supabase） ==========
+    // 加载祝福（Supabase）
     async function loadCloudMessages() {
         let box = document.getElementById("mainMessageWall");
         box.innerHTML = '<div class="loading">正在加载所有祝福...</div>';
