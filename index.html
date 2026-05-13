@@ -461,7 +461,7 @@
 
     // ============ 在这里填你的 Supabase 配置 ============
     const SUPABASE_URL = "https://pfwrrxoithqbwlrlthnz.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_AypGPast9PxEYR-RKZVfxA_Klc5Yap_";
+    const SUPABASE_ANON_KEY = "你的Publishable Key";
     // ====================================================
 
     // 初始化 Supabase
@@ -528,7 +528,7 @@
         }
     }
 
-    // 进入朋友祝福页
+    // 进入朋友祝福页（修复点：确保这个函数存在）
     function goToFriend(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
