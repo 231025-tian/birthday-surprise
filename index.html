@@ -344,7 +344,7 @@
         <div class="page-content">
             <div class="game-box">
                 <h2>🔐 请输入专属密码</h2>
-                <input type="text" class="game-input" id="verifyPwd" placeholder="请输入密码">
+                <input type="text" class="game-input" id="verifyPwd" placeholder="请输入密码" autocomplete="off">
                 <button class="game-btn" onclick="checkVerify()">验证进入</button>
             </div>
             <div class="back-btn">
@@ -408,7 +408,7 @@
             <div class="game-box">
                 <h2>解锁专属小惊喜 🔐</h2>
                 <p style="margin:15px 0; color:#666; font-size:17px;">输入专属密码，查看小惊喜</p>
-                <input type="text" class="game-input" id="pwdInput" placeholder="请输入密码">
+                <input type="text" class="game-input" id="pwdInput" placeholder="请输入密码" autocomplete="off">
                 <button class="game-btn" onclick="checkPwd()">立即解锁</button>
                 <div class="secret-msg" id="secret">✨ 密码正确啦！记得凭此页面截图领取生日礼物哦 ✨</div>
             </div>
@@ -435,10 +435,10 @@
             <div class="friend-page">
                 <h2>💌 写下你的生日祝福</h2>
                 <div class="input-group">
-                    <input type="text" id="name" placeholder="你的名字">
+                    <input type="text" id="name" placeholder="你的名字" autocomplete="name">
                 </div>
                 <div class="input-group">
-                    <textarea id="content" placeholder="祝福内容"></textarea>
+                    <textarea id="content" placeholder="祝福内容" autocomplete="off"></textarea>
                 </div>
                 <button class="submit-btn" onclick="submitMessage()">提交祝福</button>
             </div>
@@ -506,14 +506,14 @@
         setBackground(0);
     }
 
-    // 进入验证页（已定义）
+    // 进入验证页
     function goToVerify(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
         setBackground(0);
     }
 
-    // 进入朋友祝福页（已定义）
+    // 进入朋友祝福页
     function goToFriend(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
