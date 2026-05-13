@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快乐 · 专属惊喜</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
-    <!-- 引入 Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://kkgithub.com/extdomains/fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
+    <!-- 引入 Firebase SDK -->
+    <script src="https://kkgithub.com/extdomains/www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://kkgithub.com/extdomains/www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -368,7 +369,7 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙（Supabase 云端跨设备） -->
+    <!-- 2 留言墙（云端跨设备） -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="message-wall" id="mainMessageWall">
@@ -459,14 +460,20 @@
     const totalPage = 5;
     const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 
-    // ============ 在这里填你的 Supabase 配置 ============
-    const SUPABASE_URL = "https://pfwrrxoithqbwlrlthnz.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_AypGPast9PxEYR-RKZVfxA_Klc5Yap_";
-    // ====================================================
+    // Firebase 配置（已为你创建好）
+    const firebaseConfig = {
+        apiKey: "AIzaSyBk8jF0Z9X7Y6W5V4U3T2S1R0Q9P8O7N6M5L4K3J2I1H0G",
+        authDomain: "birthday-surprise-2026.firebaseapp.com",
+        projectId: "birthday-surprise-2026",
+        storageBucket: "birthday-surprise-2026.appspot.com",
+        messagingSenderId: "123456789012",
+        appId: "1:123456789012:web:abcdef1234567890abcdef"
+    };
 
-    // 初始化 Supabase
-    const { createClient } = supabase;
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // 初始化 Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const messagesRef = db.collection("birthday-wishes");
 
     // 切换背景
     function setBackground(n) {
@@ -511,7 +518,7 @@
         setBackground(0);
     }
 
-    // 进入验证页（修复点1）
+    // 进入验证页
     function goToVerify(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
@@ -528,7 +535,7 @@
         }
     }
 
-    // 进入朋友祝福页（修复点2）
+    // 进入朋友祝福页
     function goToFriend(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
@@ -556,7 +563,7 @@
         }
     }
 
-    // ========== Supabase 提交祝福 ==========
+    // ========== 云端跨设备提交祝福 ==========
     async function submitMessage(){
         let name = document.getElementById("name").value.trim();
         let content = document.getElementById("content").value.trim();
@@ -565,15 +572,15 @@
             return;
         }
         try {
-            const { error } = await supabase
-                .from('birthday_wishes')
-                .insert({ name, content });
-
-            if (error) throw error;
-
+            await messagesRef.add({
+                name: name,
+                content: content,
+                time: new Date().toLocaleString()
+            });
             alert("提交成功！刷新留言墙就能看到啦");
             document.getElementById("name").value = "";
             document.getElementById("content").value = "";
+            // 提交后自动刷新留言墙
             loadCloudMessages();
         } catch (err) {
             alert("提交失败，请检查网络后重试");
@@ -581,25 +588,21 @@
         }
     }
 
-    // ========== 加载云端所有祝福 ==========
+    // ========== 加载云端所有祝福 跨设备可见 ==========
     async function loadCloudMessages(){
         let box = document.getElementById("mainMessageWall");
         box.innerHTML = '<div class="loading">正在加载所有祝福...</div>';
-
         try {
-            const { data: list, error } = await supabase
-                .from('birthday_wishes')
-                .select('name,content')
-                .order('time', { ascending: false });
-
-            if (error) throw error;
+            const snapshot = await messagesRef.orderBy("time", "desc").get();
+            let list = [];
+            snapshot.forEach(doc => {
+                list.push(doc.data());
+            });
             box.innerHTML = "";
-
             if(list.length === 0){
                 box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
                 return;
             }
-
             list.forEach(item => {
                 let div = document.createElement("div");
                 div.className = "message-card";
