@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快乐 · 专属惊喜</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
-    <!-- 换成 Supabase -->
+    <link rel="stylesheet" href="https://kkgithub.com/extdomains/fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -460,8 +459,8 @@
     const backgrounds = ["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg","bg5.jpg"];
 
     // ========== 替换成 Supabase 云端储存 ==========
-    const SUPABASE_URL = "https://pfwrrxoithqbwlrtlhnz.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_AypGPast9PxEYR-RKZVfxA_Klc5Yap_";
+    const SUPABASE_URL = "https://zgakbjoydgukzynvcioy.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_PfUCXw3-X2mJCU-J2u7bUw_sMOqjKMI";
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // 切换背景
@@ -507,10 +506,17 @@
         setBackground(0);
     }
 
-    // 进入验证页
+    // 进入验证页（修复了这个函数）
     function goToVerify(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
+        setBackground(0);
+    }
+
+    // 进入朋友祝福页（修复了这个函数）
+    function goToFriend(){
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('friendPage').classList.add('active');
         setBackground(0);
     }
 
@@ -522,13 +528,6 @@
         }else{
             alert("密码不正确哦！");
         }
-    }
-
-    // 进入朋友祝福页
-    function goToFriend(){
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('friendPage').classList.add('active');
-        setBackground(0);
     }
 
     // 翻页按钮事件
