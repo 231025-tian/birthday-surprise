@@ -511,7 +511,7 @@
         setBackground(0);
     }
 
-    // 进入验证页
+    // 进入验证页（修复点1）
     function goToVerify(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
@@ -528,7 +528,7 @@
         }
     }
 
-    // 进入朋友祝福页（修复点：确保这个函数存在）
+    // 进入朋友祝福页（修复点2）
     function goToFriend(){
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
