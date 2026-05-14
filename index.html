@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -461,7 +462,7 @@
     // Supabase 配置
     const SUPABASE_URL = "https://zgakbjoydgukzynvcioy.supabase.co";
     const SUPABASE_KEY = "sb_publishable_PfUCXw3-X2mJCU-J2u7bUw_sMOqjKMI";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);  // ✅ 修复变量名
 
     // 切换背景
     function setBackground(n) {
@@ -551,7 +552,7 @@
         }
     }
 
-    // 提交祝福（Supabase）
+    // 提交祝福（Supabase） ✅ 使用 supabaseClient
     async function submitMessage() {
         let name = document.getElementById("name").value.trim();
         let content = document.getElementById("content").value.trim();
@@ -567,7 +568,7 @@
         }
 
         try {
-            const { error } = await supabase.from('birthday-wishes').insert([
+            const { error } = await supabaseClient.from('birthday-wishes').insert([
                 {
                     name: name,
                     content: content,
@@ -589,13 +590,13 @@
         }
     }
 
-    // 加载祝福（Supabase）
+    // 加载祝福（Supabase） ✅ 使用 supabaseClient
     async function loadCloudMessages() {
         let box = document.getElementById("mainMessageWall");
         box.innerHTML = '<div class="loading">正在加载所有祝福...</div>';
 
         try {
-            let { data: list, error } = await supabase
+            let { data: list, error } = await supabaseClient
                 .from('birthday-wishes')
                 .select('*')
                 .order('time', { ascending: false });
@@ -629,3 +630,4 @@
 </script>
 </body>
 </html>
+```
