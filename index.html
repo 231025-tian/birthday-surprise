@@ -194,6 +194,7 @@
             padding: 22px;
             border-radius: 15px;
             box-shadow: 0 4px 12px rgba(147,112,219,0.1);
+            position: relative;
         }
         .msg-name {
             color: #7b68ee;
@@ -205,6 +206,24 @@
             color: #555;
             line-height: 1.8;
             font-size: 16px;
+        }
+        /* 删除按钮样式 */
+        .del-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #ff8888;
+            border: none;
+            border-radius: 30px;
+            padding: 4px 12px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .del-btn:hover {
+            background: #ff4444;
         }
 
         .game-box {
@@ -388,7 +407,7 @@
             <div class="cake-page">
                 <h1>🎂 祝你生日快乐 🎂</h1>
                 <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
-                <img class="cake-img" src="cake.jpg" alt="生日蛋糕" onerror="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
+                <img class="cake-img" src="https://cdn.pixabay.com/photo/2016/11/29/09/16/birthday-1869615_1280.jpg" alt="生日蛋糕" onerror="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
                 <div id="cakeFallback" class="cake-fallback">🎂</div>
                 <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
             </div>
@@ -496,6 +515,7 @@
     let currentPage = 0;
     const TOTAL_PAGE = 5;
     const PASSWORD = "1880";
+    let isAuthenticated = false;   // 是否已验证为本人（控制删除按钮显示）
 
     // 快捷导航
     function renderQuickNav(current) {
@@ -542,29 +562,31 @@
             nextBtn.disabled = false;
         }
 
-        if (n === 2) loadCloudMessages();
+        if (n === 2) loadCloudMessages(); // 每次进入留言墙重新加载，以便根据 isAuthenticated 显示删除按钮
         renderQuickNav(n);
         document.body.style.background = "linear-gradient(135deg, #e0f0ff, #f3e5ff)";
     }
 
-    // 密码验证
-    function checkPassword(inputId, showSecretId = null) {
-        const val = document.getElementById(inputId).value.trim();
+    // 密码验证（蛋糕入口）
+    function checkVerify() {
+        const val = document.getElementById("verifyPwd").value.trim();
         if (val === PASSWORD) {
-            if (showSecretId) document.getElementById(showSecretId).style.display = "block";
-            return true;
+            isAuthenticated = true;
+            showPage(1);
         } else {
             alert("密码不正确哦！");
-            return false;
         }
     }
 
-    function checkVerify() {
-        if (checkPassword("verifyPwd")) showPage(1);
-    }
-
+    // 彩蛋页密码验证（可选，也标记为本人）
     function checkPwd() {
-        checkPassword("pwdInput", "secret");
+        const val = document.getElementById("pwdInput").value.trim();
+        if (val === PASSWORD) {
+            document.getElementById("secret").style.display = "block";
+            isAuthenticated = true; // 顺便标记本人身份，以便删除按钮也出现在留言墙
+        } else {
+            alert("密码不正确哦！");
+        }
     }
 
     // 页面跳转
@@ -585,7 +607,29 @@
         document.getElementById('friendPage').classList.add('active');
     }
 
-    // ======================== 留言墙（已修复 time 字段错误）========================
+    // ======================== 删除留言函数 ========================
+    async function deleteMessage(id, cardElement) {
+        if (!confirm("确定要删除这条祝福吗？删除后无法恢复。")) return;
+        try {
+            const { error } = await supabaseClient
+                .from('birthday-wishes')
+                .delete()
+                .eq('id', id);
+            if (error) throw error;
+            // 从DOM中移除卡片
+            cardElement.remove();
+            // 如果删除后没有祝福了，显示提示
+            const remainingCards = document.querySelectorAll('#mainMessageWall .message-card');
+            if (remainingCards.length === 0) {
+                document.getElementById('mainMessageWall').innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;">暂时还没有祝福，快来写下第一条吧～</p>';
+            }
+        } catch (err) {
+            alert("删除失败：" + err.message);
+            console.error(err);
+        }
+    }
+
+    // ======================== 留言墙（带删除按钮）========================
     async function loadCloudMessages() {
         const box = document.getElementById("mainMessageWall");
         if (!box) return;
@@ -606,17 +650,29 @@
             }
 
             list.forEach(item => {
-                const div = document.createElement("div");
-                div.className = "message-card";
+                const card = document.createElement("div");
+                card.className = "message-card";
+                // 名字
                 const nameDiv = document.createElement("div");
                 nameDiv.className = "msg-name";
                 nameDiv.textContent = item.name || "匿名";
+                // 祝福内容
                 const textP = document.createElement("p");
                 textP.className = "msg-text";
                 textP.textContent = item.content || "";
-                div.appendChild(nameDiv);
-                div.appendChild(textP);
-                box.appendChild(div);
+                card.appendChild(nameDiv);
+                card.appendChild(textP);
+
+                // 如果本人已验证，添加删除按钮
+                if (isAuthenticated) {
+                    const delBtn = document.createElement("button");
+                    delBtn.textContent = "✖ 删除";
+                    delBtn.className = "del-btn";
+                    delBtn.onclick = () => deleteMessage(item.id, card);
+                    card.appendChild(delBtn);
+                }
+
+                box.appendChild(card);
             });
         } catch (err) {
             box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:red;">加载失败</p>';
@@ -624,7 +680,7 @@
         }
     }
 
-    // 提交祝福（不再传 time 字段）
+    // 提交祝福
     async function submitMessage() {
         let name = document.getElementById("name").value.trim();
         let content = document.getElementById("content").value.trim();
@@ -658,7 +714,7 @@
         if (currentPage > 1) showPage(currentPage - 1);
     });
 
-    // 初始化
+    // 初始化全局函数
     window.goToHome = goToHome;
     window.goToVerify = goToVerify;
     window.goToFriend = goToFriend;
