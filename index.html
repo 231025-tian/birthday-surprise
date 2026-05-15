@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>生日快乐 · 专属惊喜</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -22,7 +22,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 950px;
             margin: 0 auto;
             position: relative;
         }
@@ -33,56 +33,101 @@
             color: #7b68ee;
             margin-bottom: 30px;
             letter-spacing: 2px;
-            background: rgba(255,255,255,0.75);
+            background: rgba(255,255,255,0.85);
             display: inline-block;
-            padding: 8px 24px;
-            border-radius: 30px;
+            padding: 8px 28px;
+            border-radius: 40px;
             position: relative;
             left: 50%;
             transform: translateX(-50%);
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            z-index: 10;
         }
 
+        /* 页面基础样式 */
         .page {
             display: none;
             animation: fade 0.5s ease;
             min-height: 600px;
-            padding: 30px;
+            border-radius: 28px;
+            overflow: hidden;      /* 让背景圆角生效，且避免内容溢出 */
+            transition: all 0.2s;
         }
         .page.active {
             display: block;
         }
 
         @keyframes fade {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* 内容卡片 - 半透磨砂效果，保证文字清晰且背景透出 */
         .page-content {
-            background: rgba(255,255,255,0.6);
-            border-radius: 20px;
-            padding: 25px;
-            min-height: 480px;
-            box-shadow: 0 10px 35px rgba(150,130,220,0.15);
-            backdrop-filter: blur(6px);
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 28px 24px;
+            min-height: 520px;
+            box-shadow: 0 12px 35px rgba(100, 70, 150, 0.2);
+            transition: all 0.2s;
+            border: 1px solid rgba(255,255,240,0.3);
+        }
+
+        /* ========= 为五个核心TAP页添加独立背景图 (bg1 ~ bg5) ========= */
+        /* 背景图片位于.page层，自然处于所有文字和图层的下方 */
+        #page1 {
+            background: url('bg1.jpg') no-repeat center center / cover;
+            background-color: #fbe9f0;  /* 加载失败时的友好后备色 */
+        }
+        #page2 {
+            background: url('bg2.jpg') no-repeat center center / cover;
+            background-color: #e8f0fe;
+        }
+        #page3 {
+            background: url('bg3.jpg') no-repeat center center / cover;
+            background-color: #f0f3da;
+        }
+        #page4 {
+            background: url('bg4.jpg') no-repeat center center / cover;
+            background-color: #ffe6f0;
+        }
+        #page5 {
+            background: url('bg5.jpg') no-repeat center center / cover;
+            background-color: #f9e9ff;
+        }
+
+        /* 让背景图片区域拥有优雅圆角（和页面融为一体） */
+        #page1, #page2, #page3, #page4, #page5 {
+            border-radius: 28px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 其余页面（身份选择、验证、朋友页）保留原始渐变背景，无背景图干扰 */
+        #page0, #verifyPage, #friendPage {
+            background: transparent;
         }
 
         .quick-nav {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            margin-bottom: 28px;
         }
         .quick-nav button {
-            background: #fff2e0;
+            background: rgba(255, 242, 224, 0.9);
             border: none;
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-size: 15px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
             color: #7b68ee;
             transition: 0.2s;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            backdrop-filter: blur(2px);
         }
         .quick-nav button:hover {
             background: #9370db;
@@ -92,54 +137,64 @@
         .quick-nav button.active {
             background: #9370db;
             color: white;
+            box-shadow: 0 4px 12px rgba(147,112,219,0.4);
         }
 
         .nav-btn {
-            margin-top: 20px;
+            margin-top: 28px;
             text-align: center;
         }
         .nav-btn button {
-            padding: 13px 32px;
+            padding: 12px 32px;
             background: #9370db;
             color: #fff;
             border: none;
-            border-radius: 30px;
-            font-size: 17px;
+            border-radius: 40px;
+            font-size: 18px;
             cursor: pointer;
             margin: 0 10px;
-            transition: 0.3s;
+            transition: 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .nav-btn button:hover {
             background: #7b68ee;
+            transform: scale(1.02);
         }
         .nav-btn button:disabled {
-            background: #ccc;
+            background: #bbb;
             cursor: not-allowed;
+            transform: none;
         }
 
         .back-btn {
-            margin-top: 20px;
+            margin-top: 25px;
             text-align: center;
         }
         .back-btn button {
-            padding: 11px 28px;
-            background: #b4c8f0;
-            color: #333;
+            padding: 10px 28px;
+            background: rgba(180, 200, 240, 0.9);
+            color: #2c2c2c;
             border: none;
-            border-radius: 25px;
+            border-radius: 40px;
             cursor: pointer;
             font-size: 16px;
+            transition: 0.2s;
+            backdrop-filter: blur(2px);
+        }
+        .back-btn button:hover {
+            background: #a5bbdf;
         }
 
         .letter {
-            background: #f5f8ff;
-            padding: 35px;
-            border-radius: 15px;
+            background: rgba(245, 248, 255, 0.8);
+            padding: 38px 32px;
+            border-radius: 28px;
             line-height: 2.2;
             font-size: 18px;
             white-space: pre-line;
-            border-left: 5px solid #9370db;
-            color: #333;
+            border-left: 6px solid #9370db;
+            color: #1e2a3e;
+            backdrop-filter: blur(2px);
         }
 
         .timeline {
@@ -151,79 +206,90 @@
         .timeline::before {
             content: '';
             position: absolute;
-            left: 10px;
+            left: 14px;
             top: 0;
             bottom: 0;
             width: 3px;
-            background: #b4c8f0;
+            background: #c2b0f0;
         }
         .timeline-item {
             position: relative;
-            margin-bottom: 30px;
-            padding-left: 25px;
+            margin-bottom: 32px;
+            padding-left: 28px;
         }
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -34px;
+            left: -32px;
             top: 6px;
             width: 16px;
             height: 16px;
             border-radius: 50%;
             background: #9370db;
+            box-shadow: 0 0 0 3px rgba(147,112,219,0.3);
         }
         .time-date {
-            color: #7b68ee;
+            color: #6a4e9b;
             font-weight: bold;
-            font-size: 19px;
+            font-size: 20px;
             margin-bottom: 6px;
         }
         .time-text {
-            color: #555;
+            color: #1e2f3e;
             line-height: 1.8;
             font-size: 17px;
+            background: rgba(255,255,240,0.4);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
         }
 
         .message-wall {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 22px;
         }
         .message-card {
-            background: linear-gradient(145deg, #f0f5ff, #f3f0ff);
+            background: rgba(255, 250, 240, 0.85);
+            backdrop-filter: blur(4px);
             padding: 22px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(147,112,219,0.1);
+            border-radius: 24px;
+            box-shadow: 0 8px 20px rgba(147,112,219,0.12);
             position: relative;
+            transition: 0.2s;
+            border: 1px solid rgba(255,255,210,0.6);
         }
         .msg-name {
-            color: #7b68ee;
+            color: #9b6bcf;
             font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 18px;
+            margin-bottom: 12px;
+            font-size: 19px;
+            letter-spacing: 1px;
         }
         .msg-text {
-            color: #555;
-            line-height: 1.8;
+            color: #2c3e4e;
+            line-height: 1.7;
             font-size: 16px;
+            word-break: break-word;
         }
-        /* 删除按钮样式 */
         .del-btn {
             position: absolute;
             top: 12px;
             right: 12px;
-            background: #ff8888;
+            background: #ff9a8b;
             border: none;
-            border-radius: 30px;
-            padding: 4px 12px;
+            border-radius: 40px;
+            padding: 4px 14px;
             color: white;
             cursor: pointer;
             font-size: 12px;
             transition: 0.2s;
             font-family: inherit;
+            font-weight: bold;
         }
         .del-btn:hover {
-            background: #ff4444;
+            background: #e96350;
+            transform: scale(1.02);
         }
 
         .game-box {
@@ -232,62 +298,68 @@
         }
         .game-box h2 {
             color: #7b68ee;
-            margin-bottom: 15px;
-            font-size: 22px;
+            margin-bottom: 20px;
+            font-size: 26px;
         }
         .game-input {
-            padding: 12px 15px;
-            width: 240px;
-            border: 2px solid #b4c8f0;
-            border-radius: 10px;
+            padding: 12px 18px;
+            width: 260px;
+            border: 2px solid #cfc0f0;
+            border-radius: 60px;
             font-size: 17px;
             outline: none;
-            background: #f8faff;
+            background: rgba(255,255,245,0.9);
+            text-align: center;
         }
         .game-btn {
-            padding: 12px 22px;
+            padding: 12px 28px;
             background: #9370db;
             color: white;
             border: none;
-            border-radius: 10px;
-            margin-left: 10px;
+            border-radius: 60px;
+            margin-left: 12px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
             font-size: 17px;
         }
         .game-btn:hover {
             background: #7b68ee;
+            transform: translateY(-2px);
         }
         .secret-msg {
-            margin-top: 25px;
-            font-size: 20px;
-            color: #9370db;
+            margin-top: 28px;
+            font-size: 22px;
+            color: #b45fbb;
             display: none;
             font-weight: 500;
-            animation: fade 0.5s ease;
+            background: rgba(255,255,210,0.7);
+            padding: 14px;
+            border-radius: 60px;
+            backdrop-filter: blur(5px);
         }
 
         .cake-page {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 15px;
         }
         .cake-page h1 {
-            color: #7b68ee;
-            margin-bottom: 15px;
-            font-size: 28px;
+            color: #8a6acf;
+            margin-bottom: 20px;
+            font-size: 32px;
         }
         .fireworks {
-            font-size: 24px;
+            font-size: 28px;
             margin: 15px 0;
-            letter-spacing: 5px;
+            letter-spacing: 8px;
         }
         .cake-img {
-            width: 550px;
-            max-width: 100%;
+            width: 480px;
+            max-width: 90%;
             margin: 20px auto;
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(147,112,219,0.2);
+            border-radius: 28px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
             display: block;
+            background: #fbe9d0;
         }
         .cake-fallback {
             font-size: 130px;
@@ -296,77 +368,99 @@
         }
         .cake-desc {
             font-size: 19px;
-            color: #666;
-            margin-top: 15px;
+            color: #4a2e6e;
+            margin-top: 18px;
+            font-weight: 500;
+            background: rgba(255,255,240,0.5);
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 60px;
         }
 
         .choose-box {
             text-align: center;
-            padding: 60px 20px;
+            padding: 70px 20px;
         }
         .choose-box h2 {
             color: #7b68ee;
-            margin-bottom: 40px;
-            font-size: 24px;
+            margin-bottom: 50px;
+            font-size: 28px;
         }
         .choose-btn {
-            padding: 20px 45px;
-            font-size: 20px;
+            padding: 18px 48px;
+            font-size: 22px;
             background: #9370db;
             color: white;
             border: none;
-            border-radius: 30px;
-            margin: 15px;
+            border-radius: 60px;
+            margin: 18px;
             cursor: pointer;
             transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
         .choose-btn:hover {
             background: #7b68ee;
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         .friend-page {
-            padding: 30px 20px;
+            padding: 20px 20px;
             text-align: center;
         }
         .friend-page h2 {
             color: #7b68ee;
             margin-bottom: 30px;
-            font-size: 22px;
+            font-size: 26px;
         }
         .input-group {
-            margin: 18px auto;
+            margin: 22px auto;
             text-align: center;
-            max-width: 450px;
+            max-width: 500px;
         }
         .input-group input,
         .input-group textarea {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #b4c8f0;
-            border-radius: 12px;
+            padding: 14px 18px;
+            border: 2px solid #cfbef0;
+            border-radius: 28px;
             font-size: 17px;
             outline: none;
+            background: rgba(255,255,245,0.9);
+            transition: 0.2s;
         }
         .input-group textarea {
             min-height: 120px;
-            resize: none;
+            resize: vertical;
         }
         .submit-btn {
-            padding: 14px 35px;
+            padding: 14px 38px;
             background: #9370db;
             color: white;
             border: none;
-            border-radius: 14px;
-            font-size: 18px;
+            border-radius: 40px;
+            font-size: 19px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 12px;
         }
         .loading {
             text-align: center;
             color: #7b68ee;
-            font-size: 17px;
-            padding: 30px;
+            font-size: 18px;
+            padding: 40px;
+        }
+
+        @media (max-width: 650px) {
+            .page-content {
+                padding: 20px 16px;
+            }
+            .quick-nav button {
+                padding: 6px 14px;
+                font-size: 14px;
+            }
+            .letter {
+                padding: 25px 20px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -391,7 +485,7 @@
         <div class="page-content">
             <div class="game-box">
                 <h2>🔐 请输入专属密码</h2>
-                <input type="text" class="game-input" id="verifyPwd" placeholder="请输入密码" autocomplete="off">
+                <input type="text" class="game-input" id="verifyPwd" placeholder="密码 1880" autocomplete="off">
                 <button class="game-btn" onclick="checkVerify()">验证进入</button>
             </div>
             <div class="back-btn">
@@ -400,82 +494,83 @@
         </div>
     </div>
 
-    <!-- 1 生日蛋糕页 -->
+    <!-- 1 生日蛋糕页 (tap1) -->
     <div class="page" id="page1">
         <div class="page-content">
-            <div class="quick-nav" id="quickNav"></div>
+            <div class="quick-nav" id="quickNav1"></div>
             <div class="cake-page">
                 <h1>🎂 祝你生日快乐 🎂</h1>
                 <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
                 <img class="cake-img" src="cake.jpg" alt="生日蛋糕" onerror="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
-                <div id="cakeFallback" class="cake-fallback">🎂</div>
+                <div id="cakeFallback" class="cake-fallback">🎂❤️</div>
                 <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙（云端跨设备） -->
+    <!-- 2 留言墙（云端跨设备）tap2 -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="quick-nav" id="quickNav2"></div>
             <div class="message-wall" id="mainMessageWall">
-                <div class="loading">正在加载所有祝福...</div>
+                <div class="loading">🌟 正在加载所有祝福...</div>
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 3 时间轴 -->
+    <!-- 3 时光轴 tap3 -->
     <div class="page" id="page3">
         <div class="page-content">
             <div class="quick-nav" id="quickNav3"></div>
             <div class="timeline">
                 <div class="timeline-item">
-                    <div class="time-date">2021年4月5日</div>
+                    <div class="time-date">💜 2021年4月5日</div>
                     <div class="time-text">我们初次相遇，当时只以为是萍水相逢。</div>
                 </div>
                 <div class="timeline-item">
-                    <div class="time-date">2022年8月31日</div>
+                    <div class="time-date">📚 2022年8月31日</div>
                     <div class="time-text">我们在高中的教室里相遇，我们开始慢慢熟悉，友谊的长河也开始奔腾。</div>
                 </div>
                 <div class="timeline-item">
-                    <div class="time-date">2025年6月30日</div>
+                    <div class="time-date">✨ 2025年6月30日</div>
                     <div class="time-text">我们重新加上了彼此的好友，友谊的小船再次起航。</div>
                 </div>
                 <div class="timeline-item">
-                    <div class="time-date">今年生日</div>
-                    <div class="time-text">愿往后岁岁年年，我们仍然可以是朋友。</div>
+                    <div class="time-date">🎂 今年生日</div>
+                    <div class="time-text">愿往后岁岁年年，我们仍然可以是朋友。永远自在明亮。</div>
                 </div>
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 4 密码彩蛋页 -->
+    <!-- 4 密码彩蛋页 tap4 -->
     <div class="page" id="page4">
         <div class="page-content">
             <div class="quick-nav" id="quickNav4"></div>
             <div class="game-box">
-                <h2>解锁专属小惊喜 🔐</h2>
-                <p style="margin:15px 0; color:#666; font-size:17px;">输入专属密码，查看小惊喜</p>
+                <h2>🎁 解锁专属小惊喜 🔐</h2>
+                <p style="margin:12px 0; color:#4e3a6e; font-size:17px;">输入专属密码，查看小惊喜 ✨</p>
                 <input type="text" class="game-input" id="pwdInput" placeholder="请输入密码" autocomplete="off">
                 <button class="game-btn" onclick="checkPwd()">立即解锁</button>
-                <div class="secret-msg" id="secret">✨ 密码正确啦！记得凭此页面截图领取生日礼物哦 ✨</div>
+                <div class="secret-msg" id="secret">🎁 密码正确啦！记得凭此页面截图领取生日礼物哦 💝</div>
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 5 给你的信 -->
+    <!-- 5 给你的信 tap5 -->
     <div class="page" id="page5">
         <div class="page-content">
             <div class="quick-nav" id="quickNav5"></div>
             <div class="letter">
-提笔写下这些话，只想认真祝你生日快乐。
-特意为你做了这个小小的专属网站，把祝福、心意和所有想说的话都藏在这里。
-希望往后岁岁年年，你永远被温柔以待，永远自在明亮，永远保持自己喜欢的模样。
-愿清风绕肩，美好常驻，而我们，会一直是好朋友。
+✨ 提笔写下这些话，只想认真祝你生日快乐。<br><br>
+特意为你做了这个小小的专属网站，把祝福、心意和所有想说的话都藏在这里。<br>
+希望往后岁岁年年，你永远被温柔以待，永远自在明亮，永远保持自己喜欢的模样。<br>
+愿清风绕肩，美好常驻，而我们，会一直是好朋友。<br><br>
+💜 生日快乐，吴佳钰！ 💜
             </div>
         </div>
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
@@ -487,20 +582,20 @@
             <div class="friend-page">
                 <h2>💌 写下你的生日祝福</h2>
                 <div class="input-group">
-                    <input type="text" id="name" placeholder="你的名字" autocomplete="name">
+                    <input type="text" id="name" placeholder="你的名字（昵称）" autocomplete="name">
                 </div>
                 <div class="input-group">
-                    <textarea id="content" placeholder="祝福内容" autocomplete="off"></textarea>
+                    <textarea id="content" placeholder="留下你对吴佳钰的生日祝福吧～ 暖心的话会永远保留 💖" autocomplete="off"></textarea>
                 </div>
-                <button class="submit-btn" onclick="submitMessage()">提交祝福</button>
+                <button class="submit-btn" onclick="submitMessage()">✨ 提交祝福 ✨</button>
             </div>
             <div class="back-btn" style="margin-top:30px;"><button onclick="goToHome()">返回首页</button></div>
         </div>
     </div>
 
     <div class="nav-btn" id="navButtons" style="display:none;">
-        <button id="prevBtn">上一页</button>
-        <button id="nextBtn">下一页</button>
+        <button id="prevBtn">◀ 上一页</button>
+        <button id="nextBtn">下一页 ▶</button>
     </div>
 </div>
 
@@ -517,9 +612,9 @@
     const PASSWORD = "1880";
     let isAuthenticated = false;   // 是否已验证为本人（控制删除按钮显示）
 
-    // 快捷导航
-    function renderQuickNav(current) {
-        const pages = [
+    // 渲染五个核心tab的快捷导航
+    function renderQuickNav(currentNum) {
+        const pagesConfig = [
             { name: "🎂 蛋糕", id: 1 },
             { name: "💬 留言墙", id: 2 },
             { name: "📅 时光轴", id: 3 },
@@ -528,68 +623,76 @@
         ];
         const navHtml = `
             <div class="quick-nav">
-                ${pages.map(p => `<button data-page="${p.id}" class="${current === p.id ? 'active' : ''}">${p.name}</button>`).join('')}
+                ${pagesConfig.map(p => `<button data-page="${p.id}" class="${currentNum === p.id ? 'active' : ''}">${p.name}</button>`).join('')}
             </div>
         `;
+        // 为每个包含快捷栏的容器填充相同导航
         for (let i = 1; i <= 5; i++) {
-            const navContainer = document.getElementById(`quickNav${i === 1 ? '' : i}`);
-            if (navContainer) navContainer.innerHTML = navHtml;
+            const containerId = `quickNav${i === 1 ? '1' : i}`;
+            const container = document.getElementById(containerId);
+            if (container) container.innerHTML = navHtml;
         }
+        // 绑定事件
         document.querySelectorAll('.quick-nav button').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const pageNum = parseInt(btn.dataset.page);
-                if (!isNaN(pageNum)) showPage(pageNum);
+                if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= 5) {
+                    showPage(pageNum);
+                }
             });
         });
     }
 
-    // 切换页面
+    // 切换主要内部页面（蛋糕/留言墙/时光轴/彩蛋/信）
     function showPage(n) {
         if (n < 1 || n > 5) return;
+        // 隐藏所有页面，显示对应页
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(`page${n}`).classList.add('active');
         currentPage = n;
 
         const navButtons = document.getElementById('navButtons');
         navButtons.style.display = 'block';
-        document.getElementById('prevBtn').style.display = n === 1 ? 'none' : 'inline-block';
+        document.getElementById('prevBtn').style.display = (n === 1) ? 'none' : 'inline-block';
         const nextBtn = document.getElementById('nextBtn');
         if (n === TOTAL_PAGE) {
-            nextBtn.innerText = "已到最后一页";
+            nextBtn.innerText = "✨ 最后一页 ✨";
             nextBtn.disabled = true;
         } else {
-            nextBtn.innerText = "下一页";
+            nextBtn.innerText = "下一页 →";
             nextBtn.disabled = false;
         }
 
-        if (n === 2) loadCloudMessages(); // 每次进入留言墙重新加载，以便根据 isAuthenticated 显示删除按钮
+        // 每次进入留言墙刷新数据，以便根据isAuthenticated更新删除按钮
+        if (n === 2) loadCloudMessages();
         renderQuickNav(n);
-        document.body.style.background = "linear-gradient(135deg, #e0f0ff, #f3e5ff)";
     }
 
-    // 密码验证（蛋糕入口）
+    // 密码验证（从身份验证入口）
     function checkVerify() {
         const val = document.getElementById("verifyPwd").value.trim();
         if (val === PASSWORD) {
             isAuthenticated = true;
             showPage(1);
         } else {
-            alert("密码不正确哦！");
+            alert("🔐 密码不正确哦！再试试看～");
         }
     }
 
-    // 彩蛋页密码验证（可选，也标记为本人）
+    // 彩蛋页的密码验证，验证成功同样给管理权限并显示秘语
     function checkPwd() {
         const val = document.getElementById("pwdInput").value.trim();
         if (val === PASSWORD) {
             document.getElementById("secret").style.display = "block";
-            isAuthenticated = true; // 顺便标记本人身份，以便删除按钮也出现在留言墙
+            isAuthenticated = true;
+            // 如果当前在留言墙页面，刷新显示删除按钮
+            if (currentPage === 2) loadCloudMessages();
         } else {
-            alert("密码不正确哦！");
+            alert("❌ 密码错误，小惊喜暂未解锁~");
         }
     }
 
-    // 页面跳转
+    // 返回首页（身份选择）
     function goToHome() {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page0').classList.add('active');
@@ -607,7 +710,7 @@
         document.getElementById('friendPage').classList.add('active');
     }
 
-    // ======================== 删除留言函数 ========================
+    // ======================== 删除留言功能 ========================
     async function deleteMessage(id, cardElement) {
         if (!confirm("确定要删除这条祝福吗？删除后无法恢复。")) return;
         try {
@@ -616,24 +719,22 @@
                 .delete()
                 .eq('id', id);
             if (error) throw error;
-            // 从DOM中移除卡片
             cardElement.remove();
-            // 如果删除后没有祝福了，显示提示
             const remainingCards = document.querySelectorAll('#mainMessageWall .message-card');
             if (remainingCards.length === 0) {
-                document.getElementById('mainMessageWall').innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;">暂时还没有祝福，快来写下第一条吧～</p>';
+                document.getElementById('mainMessageWall').innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">✨ 暂时还没有祝福，快来写下第一条吧～ ✨</p>';
             }
         } catch (err) {
-            alert("删除失败：" + err.message);
+            alert("删除失败: " + err.message);
             console.error(err);
         }
     }
 
-    // ======================== 留言墙（带删除按钮）========================
+    // ======================== 加载留言墙（带删除按钮判断） ========================
     async function loadCloudMessages() {
         const box = document.getElementById("mainMessageWall");
         if (!box) return;
-        box.innerHTML = '<div class="loading">正在加载所有祝福...</div>';
+        box.innerHTML = '<div class="loading">💬 云端加载祝福中...</div>';
 
         try {
             let { data: list, error } = await supabaseClient
@@ -645,25 +746,22 @@
             box.innerHTML = "";
 
             if (!list || list.length === 0) {
-                box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;font-size:17px;">暂时还没有祝福，快来写下第一条吧～</p>';
+                box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#7b68ee;font-size:18px;">🌟 暂无祝福，你愿意成为第一个送祝福的人吗？ 🌟</p>';
                 return;
             }
 
             list.forEach(item => {
                 const card = document.createElement("div");
                 card.className = "message-card";
-                // 名字
                 const nameDiv = document.createElement("div");
                 nameDiv.className = "msg-name";
-                nameDiv.textContent = item.name || "匿名";
-                // 祝福内容
+                nameDiv.textContent = item.name || "匿名朋友";
                 const textP = document.createElement("p");
                 textP.className = "msg-text";
-                textP.textContent = item.content || "";
+                textP.textContent = item.content || "祝福满满～";
                 card.appendChild(nameDiv);
                 card.appendChild(textP);
 
-                // 如果本人已验证，添加删除按钮
                 if (isAuthenticated) {
                     const delBtn = document.createElement("button");
                     delBtn.textContent = "✖ 删除";
@@ -671,56 +769,61 @@
                     delBtn.onclick = () => deleteMessage(item.id, card);
                     card.appendChild(delBtn);
                 }
-
                 box.appendChild(card);
             });
         } catch (err) {
-            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:red;">加载失败</p>';
+            box.innerHTML = '<p style="text-align:center;color:#c97e5a;">⚠️ 加载失败，请检查网络后刷新重试</p>';
             console.error(err);
         }
     }
 
-    // 提交祝福
+    // 提交祝福（朋友使用）
     async function submitMessage() {
         let name = document.getElementById("name").value.trim();
         let content = document.getElementById("content").value.trim();
 
         if (!name || !content) {
-            alert("请填写完整名字和祝福内容");
+            alert("请填写完整名字和祝福内容～");
             return;
         }
-
+        if (name.length > 30) name = name.slice(0, 30);
+        if (content.length > 300) content = content.slice(0, 300);
         try {
             const { error } = await supabaseClient.from('birthday-wishes').insert([
                 { name: name, content: content }
             ]);
-
             if (error) throw error;
-            alert("提交成功！祝福已永久保存～");
+            alert("🎉 祝福提交成功！已经永久保存在云端啦 🎉");
             document.getElementById("name").value = "";
             document.getElementById("content").value = "";
             if (currentPage === 2) loadCloudMessages();
         } catch (err) {
-            alert("提交失败！");
+            alert("提交失败，请稍后重试 T_T");
             console.error(err);
         }
     }
 
-    // 翻页
-    document.getElementById('nextBtn').addEventListener('click', () => {
+    // 翻页（上一页/下一页）
+    document.getElementById('nextBtn')?.addEventListener('click', () => {
         if (currentPage < TOTAL_PAGE) showPage(currentPage + 1);
     });
-    document.getElementById('prevBtn').addEventListener('click', () => {
+    document.getElementById('prevBtn')?.addEventListener('click', () => {
         if (currentPage > 1) showPage(currentPage - 1);
     });
 
-    // 初始化全局函数
+    // 全局方法挂载
     window.goToHome = goToHome;
     window.goToVerify = goToVerify;
     window.goToFriend = goToFriend;
     window.checkVerify = checkVerify;
     window.checkPwd = checkPwd;
     window.submitMessage = submitMessage;
+    window.deleteMessage = deleteMessage;
+    window.loadCloudMessages = loadCloudMessages;
+
+    // 初始渲染导航 (在需要展示的时候会触发)
+    // 确保一开始身份页没有导航条
+    document.getElementById('navButtons').style.display = 'none';
 </script>
 </body>
 </html>
