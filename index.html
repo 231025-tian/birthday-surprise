@@ -66,7 +66,6 @@
             backdrop-filter: blur(6px);
         }
 
-        /* 导航栏样式 (新增) */
         .quick-nav {
             display: flex;
             justify-content: center;
@@ -385,12 +384,10 @@
     <!-- 1 生日蛋糕页 -->
     <div class="page" id="page1">
         <div class="page-content">
-            <!-- 快捷导航 (本人视角专用) -->
             <div class="quick-nav" id="quickNav"></div>
             <div class="cake-page">
                 <h1>🎂 祝你生日快乐 🎂</h1>
                 <div class="fireworks">🎆 🎉 🎈 ✨ 🎊 💜</div>
-                <!-- 使用免费在线蛋糕图片（确保不失效），同时保留 fallback -->
                 <img class="cake-img" src="https://cdn.pixabay.com/photo/2016/11/29/09/16/birthday-1869615_1280.jpg" alt="生日蛋糕" onerror="this.style.display='none';document.getElementById('cakeFallback').style.display='block';">
                 <div id="cakeFallback" class="cake-fallback">🎂</div>
                 <p class="cake-desc">愿所有温柔与惊喜，都如期奔赴于你</p>
@@ -482,7 +479,6 @@
         </div>
     </div>
 
-    <!-- 翻页按钮 + 快捷导航容器（动态生成） -->
     <div class="nav-btn" id="navButtons" style="display:none;">
         <button id="prevBtn">上一页</button>
         <button id="nextBtn">下一页</button>
@@ -491,35 +487,17 @@
 
 <script>
     // ======================== 配置 Supabase ========================
-    // ⚠️ 重要：请替换成你自己的 Supabase 项目 URL 和 anon key
-    // 1. 登录 https://app.supabase.com/ 进入项目
-    // 2. 在 Settings → API 中找到 Project URL 和 anon public key
-    // 3. 替换下面两行
-    const SUPABASE_URL = "https://rgiwrvpdsxhhrvdgydko.supabase.co";   // 请替换为你的实际 URL
-    const SUPABASE_KEY = "sb_publishable_apXFBjyQq4lHaOTLxVaHQQ_DDso4WJb"; // 请替换为你的实际 anon key
-
-    // 如果需要创建表，请在 Supabase SQL 编辑器中执行以下语句：
-    /*
-    CREATE TABLE public."birthday-wishes" (
-        id BIGSERIAL PRIMARY KEY,
-        name TEXT NOT NULL,
-        content TEXT NOT NULL,
-        time TEXT
-    );
-    ALTER TABLE public."birthday-wishes" ENABLE ROW LEVEL SECURITY;
-    CREATE POLICY "allow insert" ON public."birthday-wishes" FOR INSERT WITH CHECK (true);
-    CREATE POLICY "allow select" ON public."birthday-wishes" FOR SELECT USING (true);
-    */
-    // ================================================================
+    const SUPABASE_URL = "https://rgiwrvpdsxhhrvdgydko.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_apXFBjyQq4lHaOTLxVaHQQ_DDso4WJb";
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // 全局变量
-    let currentPage = 0;         // 0:首页, 1~5:本人视角页面
+    let currentPage = 0;
     const TOTAL_PAGE = 5;
-    const PASSWORD = "1880";      // 统一密码（可自行修改）
+    const PASSWORD = "1880";
 
-    // 快捷导航渲染函数（在每个本人页面顶部显示）
+    // 快捷导航
     function renderQuickNav(current) {
         const pages = [
             { name: "🎂 蛋糕", id: 1 },
@@ -533,15 +511,10 @@
                 ${pages.map(p => `<button data-page="${p.id}" class="${current === p.id ? 'active' : ''}">${p.name}</button>`).join('')}
             </div>
         `;
-        // 在5个页面中分别更新各自的 .quick-nav
         for (let i = 1; i <= 5; i++) {
             const navContainer = document.getElementById(`quickNav${i === 1 ? '' : i}`);
             if (navContainer) navContainer.innerHTML = navHtml;
-            else if (i === 1 && document.querySelector('#page1 .quick-nav')) {
-                document.querySelector('#page1 .quick-nav').innerHTML = navHtml;
-            }
         }
-        // 绑定点击事件
         document.querySelectorAll('.quick-nav button').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const pageNum = parseInt(btn.dataset.page);
@@ -550,13 +523,13 @@
         });
     }
 
-    // 显示指定页面 (n: 1~5)
+    // 切换页面
     function showPage(n) {
         if (n < 1 || n > 5) return;
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(`page${n}`).classList.add('active');
         currentPage = n;
-        // 更新导航按钮样式
+
         const navButtons = document.getElementById('navButtons');
         navButtons.style.display = 'block';
         document.getElementById('prevBtn').style.display = n === 1 ? 'none' : 'inline-block';
@@ -568,21 +541,17 @@
             nextBtn.innerText = "下一页";
             nextBtn.disabled = false;
         }
-        // 每次进入页面2时刷新留言墙
+
         if (n === 2) loadCloudMessages();
-        // 重新渲染快捷导航（高亮当前页）
         renderQuickNav(n);
-        // 背景保持渐变（移除无效的背景图请求）
         document.body.style.background = "linear-gradient(135deg, #e0f0ff, #f3e5ff)";
     }
 
-    // 密码验证（通用）
+    // 密码验证
     function checkPassword(inputId, showSecretId = null) {
         const val = document.getElementById(inputId).value.trim();
         if (val === PASSWORD) {
-            if (showSecretId) {
-                document.getElementById(showSecretId).style.display = "block";
-            }
+            if (showSecretId) document.getElementById(showSecretId).style.display = "block";
             return true;
         } else {
             alert("密码不正确哦！");
@@ -591,48 +560,32 @@
     }
 
     function checkVerify() {
-        if (checkPassword("verifyPwd")) {
-            showPage(1);
-        }
+        if (checkPassword("verifyPwd")) showPage(1);
     }
 
     function checkPwd() {
         checkPassword("pwdInput", "secret");
     }
 
-    // 返回首页
+    // 页面跳转
     function goToHome() {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page0').classList.add('active');
         document.getElementById('navButtons').style.display = 'none';
         currentPage = 0;
-        document.body.style.background = "linear-gradient(135deg, #e0f0ff, #f3e5ff)";
     }
 
     function goToVerify() {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('verifyPage').classList.add('active');
-        document.body.style.background = "linear-gradient(135deg, #e0f0ff, #f3e5ff)";
     }
 
     function goToFriend() {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('friendPage').classList.add('active');
-        document.body.style.background = "linear-gradient(135deg, #e0f0ff, #f3e5ff)";
     }
 
-    // 安全转义（预防 XSS，但使用 textContent 更安全，这里备用）
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-
-    // 加载云端留言（安全方式）
+    // ======================== 留言墙（已修复 time 字段错误）========================
     async function loadCloudMessages() {
         const box = document.getElementById("mainMessageWall");
         if (!box) return;
@@ -642,7 +595,7 @@
             let { data: list, error } = await supabaseClient
                 .from('birthday-wishes')
                 .select('*')
-                .order('time', { ascending: false });
+                .order('created_at', { ascending: false });
 
             if (error) throw error;
             box.innerHTML = "";
@@ -666,12 +619,12 @@
                 box.appendChild(div);
             });
         } catch (err) {
-            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:red;">加载失败，请检查网络和 Supabase 配置</p>';
+            box.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:red;">加载失败</p>';
             console.error(err);
         }
     }
 
-    // 提交祝福（去掉本地存储限制，允许多人多次提交）
+    // 提交祝福（不再传 time 字段）
     async function submitMessage() {
         let name = document.getElementById("name").value.trim();
         let content = document.getElementById("content").value.trim();
@@ -683,27 +636,21 @@
 
         try {
             const { error } = await supabaseClient.from('birthday-wishes').insert([
-                {
-                    name: name,
-                    content: content,
-                    time: new Date().toLocaleString()
-                }
+                { name: name, content: content }
             ]);
 
             if (error) throw error;
-
             alert("提交成功！祝福已永久保存～");
             document.getElementById("name").value = "";
             document.getElementById("content").value = "";
-            // 如果当前在留言墙页面，自动刷新
             if (currentPage === 2) loadCloudMessages();
         } catch (err) {
-            alert("提交失败，请检查网络或 Supabase 配置是否正确");
+            alert("提交失败！");
             console.error(err);
         }
     }
 
-    // 翻页按钮事件
+    // 翻页
     document.getElementById('nextBtn').addEventListener('click', () => {
         if (currentPage < TOTAL_PAGE) showPage(currentPage + 1);
     });
@@ -718,9 +665,6 @@
     window.checkVerify = checkVerify;
     window.checkPwd = checkPwd;
     window.submitMessage = submitMessage;
-
-    // 设置初始背景
-    document.body.style.background = "linear-gradient(135deg, #e0f0ff, #f3e5ff)";
 </script>
 </body>
 </html>
