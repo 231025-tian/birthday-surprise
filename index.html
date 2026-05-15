@@ -17,7 +17,7 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #e0f0ff, #f3e5ff);
+            background: linear-gradient(135deg, #e0f0ff, #f3e5ff); /* 降级背景 */
             padding: 20px;
         }
 
@@ -47,10 +47,21 @@
             animation: fade 0.5s ease;
             min-height: 600px;
             padding: 30px;
+            border-radius: 30px;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* 固定背景，可选 */
         }
         .page.active {
             display: block;
         }
+
+        /* 五个页面独立背景图 */
+        #page1 { background-image: url('bg1.jpg'); }
+        #page2 { background-image: url('bg2.jpg'); }
+        #page3 { background-image: url('bg3.jpg'); }
+        #page4 { background-image: url('bg4.jpg'); }
+        #page5 { background-image: url('bg5.jpg'); }
 
         @keyframes fade {
             from { opacity: 0; transform: translateY(10px); }
@@ -58,12 +69,12 @@
         }
 
         .page-content {
-            background: rgba(255,255,255,0.6);
+            background: rgba(255, 255, 255, 0.85); /* 提高不透明度，文字更清晰，同时透出背景 */
             border-radius: 20px;
             padding: 25px;
             min-height: 480px;
             box-shadow: 0 10px 35px rgba(150,130,220,0.15);
-            backdrop-filter: blur(6px);
+            backdrop-filter: blur(3px); /* 轻微毛玻璃效果，可删除 */
         }
 
         .quick-nav {
@@ -515,7 +526,7 @@
     let currentPage = 0;
     const TOTAL_PAGE = 5;
     const PASSWORD = "1880";
-    let isAuthenticated = false;   // 是否已验证为本人（控制删除按钮显示）
+    let isAuthenticated = false;   // 是否已验证为本人
 
     // 快捷导航
     function renderQuickNav(current) {
@@ -562,9 +573,8 @@
             nextBtn.disabled = false;
         }
 
-        if (n === 2) loadCloudMessages(); // 每次进入留言墙重新加载，以便根据 isAuthenticated 显示删除按钮
+        if (n === 2) loadCloudMessages();
         renderQuickNav(n);
-        document.body.style.background = "linear-gradient(135deg, #e0f0ff, #f3e5ff)";
     }
 
     // 密码验证（蛋糕入口）
@@ -578,12 +588,12 @@
         }
     }
 
-    // 彩蛋页密码验证（可选，也标记为本人）
+    // 彩蛋页密码验证
     function checkPwd() {
         const val = document.getElementById("pwdInput").value.trim();
         if (val === PASSWORD) {
             document.getElementById("secret").style.display = "block";
-            isAuthenticated = true; // 顺便标记本人身份，以便删除按钮也出现在留言墙
+            isAuthenticated = true;
         } else {
             alert("密码不正确哦！");
         }
@@ -607,7 +617,7 @@
         document.getElementById('friendPage').classList.add('active');
     }
 
-    // ======================== 删除留言函数 ========================
+    // 删除留言函数
     async function deleteMessage(id, cardElement) {
         if (!confirm("确定要删除这条祝福吗？删除后无法恢复。")) return;
         try {
@@ -616,9 +626,7 @@
                 .delete()
                 .eq('id', id);
             if (error) throw error;
-            // 从DOM中移除卡片
             cardElement.remove();
-            // 如果删除后没有祝福了，显示提示
             const remainingCards = document.querySelectorAll('#mainMessageWall .message-card');
             if (remainingCards.length === 0) {
                 document.getElementById('mainMessageWall').innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;">暂时还没有祝福，快来写下第一条吧～</p>';
@@ -629,7 +637,7 @@
         }
     }
 
-    // ======================== 留言墙（带删除按钮）========================
+    // 加载留言墙（带删除按钮）
     async function loadCloudMessages() {
         const box = document.getElementById("mainMessageWall");
         if (!box) return;
@@ -652,18 +660,15 @@
             list.forEach(item => {
                 const card = document.createElement("div");
                 card.className = "message-card";
-                // 名字
                 const nameDiv = document.createElement("div");
                 nameDiv.className = "msg-name";
                 nameDiv.textContent = item.name || "匿名";
-                // 祝福内容
                 const textP = document.createElement("p");
                 textP.className = "msg-text";
                 textP.textContent = item.content || "";
                 card.appendChild(nameDiv);
                 card.appendChild(textP);
 
-                // 如果本人已验证，添加删除按钮
                 if (isAuthenticated) {
                     const delBtn = document.createElement("button");
                     delBtn.textContent = "✖ 删除";
