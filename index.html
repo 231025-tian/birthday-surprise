@@ -45,13 +45,12 @@
             z-index: 10;
         }
 
-        /* 页面基础样式 */
         .page {
             display: none;
             animation: fade 0.5s ease;
             min-height: 600px;
             border-radius: 28px;
-            overflow: hidden;      /* 让背景圆角生效，且避免内容溢出 */
+            overflow: hidden;
             transition: all 0.2s;
         }
         .page.active {
@@ -63,7 +62,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 内容卡片 - 半透磨砂效果，保证文字清晰且背景透出 */
         .page-content {
             background: rgba(255, 255, 255, 0.65);
             backdrop-filter: blur(12px);
@@ -75,36 +73,26 @@
             border: 1px solid rgba(255,255,240,0.3);
         }
 
-        /* ========= 为五个核心TAP页添加独立背景图 (bg1 ~ bg5) ========= */
-        /* 背景图片位于.page层，自然处于所有文字和图层的下方 */
+        /* 三个核心页独立背景图 */
         #page1 {
-            background: url('bg1.jpg') no-repeat center center / cover;
-            background-color: #fbe9f0;  /* 加载失败时的友好后备色 */
+            background: url('/231025-tian/birthday-surprise/edit/main/bg1.jpg') no-repeat center center / cover;
+            background-color: #fbe9f0;
         }
         #page2 {
-            background: url('bg2.jpg') no-repeat center center / cover;
+            background: url('/231025-tian/birthday-surprise/edit/main/bg2.jpg') no-repeat center center / cover;
             background-color: #e8f0fe;
         }
-        #page3 {
-            background: url('bg3.jpg') no-repeat center center / cover;
-            background-color: #f0f3da;
-        }
-        #page4 {
-            background: url('bg4.jpg') no-repeat center center / cover;
-            background-color: #ffe6f0;
-        }
         #page5 {
-            background: url('bg5.jpg') no-repeat center center / cover;
+            background: url('/231025-tian/birthday-surprise/edit/main/bg5.jpg') no-repeat center center / cover;
             background-color: #f9e9ff;
         }
 
-        /* 让背景图片区域拥有优雅圆角（和页面融为一体） */
-        #page1, #page2, #page3, #page4, #page5 {
+        #page1, #page2, #page5 {
             border-radius: 28px;
             box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
         }
 
-        /* 其余页面（身份选择、验证、朋友页）保留原始渐变背景，无背景图干扰 */
+        /* 身份选择、验证、朋友页透明背景 */
         #page0, #verifyPage, #friendPage {
             background: transparent;
         }
@@ -197,53 +185,6 @@
             backdrop-filter: blur(2px);
         }
 
-        .timeline {
-            position: relative;
-            max-width: 700px;
-            margin: 0 auto;
-            padding-left: 30px;
-        }
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 14px;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: #c2b0f0;
-        }
-        .timeline-item {
-            position: relative;
-            margin-bottom: 32px;
-            padding-left: 28px;
-        }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -32px;
-            top: 6px;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #9370db;
-            box-shadow: 0 0 0 3px rgba(147,112,219,0.3);
-        }
-        .time-date {
-            color: #6a4e9b;
-            font-weight: bold;
-            font-size: 20px;
-            margin-bottom: 6px;
-        }
-        .time-text {
-            color: #1e2f3e;
-            line-height: 1.8;
-            font-size: 17px;
-            background: rgba(255,255,240,0.4);
-            padding: 4px 10px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-
         .message-wall {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
@@ -290,52 +231,6 @@
         .del-btn:hover {
             background: #e96350;
             transform: scale(1.02);
-        }
-
-        .game-box {
-            text-align: center;
-            padding: 50px 20px;
-        }
-        .game-box h2 {
-            color: #7b68ee;
-            margin-bottom: 20px;
-            font-size: 26px;
-        }
-        .game-input {
-            padding: 12px 18px;
-            width: 260px;
-            border: 2px solid #cfc0f0;
-            border-radius: 60px;
-            font-size: 17px;
-            outline: none;
-            background: rgba(255,255,245,0.9);
-            text-align: center;
-        }
-        .game-btn {
-            padding: 12px 28px;
-            background: #9370db;
-            color: white;
-            border: none;
-            border-radius: 60px;
-            margin-left: 12px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 17px;
-        }
-        .game-btn:hover {
-            background: #7b68ee;
-            transform: translateY(-2px);
-        }
-        .secret-msg {
-            margin-top: 28px;
-            font-size: 22px;
-            color: #b45fbb;
-            display: none;
-            font-weight: 500;
-            background: rgba(255,255,210,0.7);
-            padding: 14px;
-            border-radius: 60px;
-            backdrop-filter: blur(5px);
         }
 
         .cake-page {
@@ -480,13 +375,13 @@
         </div>
     </div>
 
-    <!-- 密码验证页 -->
+    <!-- 密码验证页（仅本人进入） -->
     <div class="page" id="verifyPage">
         <div class="page-content">
-            <div class="game-box">
+            <div class="game-box" style="text-align: center; padding: 50px 20px;">
                 <h2>🔐 请输入专属密码</h2>
-                <input type="text" class="game-input" id="verifyPwd" placeholder="请输入密码" autocomplete="off">
-                <button class="game-btn" onclick="checkVerify()">验证进入</button>
+                <input type="text" class="game-input" id="verifyPwd" placeholder="请输入密码" autocomplete="off" style="padding: 12px 18px; width: 260px; border: 2px solid #cfc0f0; border-radius: 60px; background: rgba(255,255,245,0.9); text-align: center;">
+                <button class="game-btn" onclick="checkVerify()" style="padding: 12px 28px; background: #9370db; color: white; border: none; border-radius: 60px; margin-left: 12px; cursor: pointer;">验证进入</button>
             </div>
             <div class="back-btn">
                 <button onclick="goToHome()">返回首页</button>
@@ -494,7 +389,7 @@
         </div>
     </div>
 
-    <!-- 1 生日蛋糕页 (tap1) -->
+    <!-- 1 生日蛋糕页 -->
     <div class="page" id="page1">
         <div class="page-content">
             <div class="quick-nav" id="quickNav1"></div>
@@ -509,7 +404,7 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 2 留言墙（云端跨设备）tap2 -->
+    <!-- 2 留言墙（云端跨设备） -->
     <div class="page" id="page2">
         <div class="page-content">
             <div class="quick-nav" id="quickNav2"></div>
@@ -520,48 +415,7 @@
         <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
     </div>
 
-    <!-- 3 时光轴 tap3 -->
-    <div class="page" id="page3">
-        <div class="page-content">
-            <div class="quick-nav" id="quickNav3"></div>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="time-date">💜 2021年4月5日</div>
-                    <div class="time-text">我们初次相遇，当时只以为是萍水相逢。</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="time-date">📚 2022年8月31日</div>
-                    <div class="time-text">我们在高中的教室里相遇，我们开始慢慢熟悉，友谊的长河也开始奔腾。</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="time-date">✨ 2025年6月30日</div>
-                    <div class="time-text">我们重新加上了彼此的好友，友谊的小船再次起航。</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="time-date">🎂 今年生日</div>
-                    <div class="time-text">愿往后岁岁年年，我们仍然可以是朋友。永远自在明亮。</div>
-                </div>
-            </div>
-        </div>
-        <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
-    </div>
-
-    <!-- 4 密码彩蛋页 tap4 -->
-    <div class="page" id="page4">
-        <div class="page-content">
-            <div class="quick-nav" id="quickNav4"></div>
-            <div class="game-box">
-                <h2>🎁 解锁专属小惊喜 🔐</h2>
-                <p style="margin:12px 0; color:#4e3a6e; font-size:17px;">输入专属密码，查看小惊喜 ✨</p>
-                <input type="text" class="game-input" id="pwdInput" placeholder="请输入密码" autocomplete="off">
-                <button class="game-btn" onclick="checkPwd()">立即解锁</button>
-                <div class="secret-msg" id="secret">🎁 密码正确啦！记得凭此页面截图领取生日礼物哦 💝</div>
-            </div>
-        </div>
-        <div class="back-btn"><button onclick="goToHome()">返回首页</button></div>
-    </div>
-
-    <!-- 5 给你的信 tap5 -->
+    <!-- 5 给你的信 -->
     <div class="page" id="page5">
         <div class="page-content">
             <div class="quick-nav" id="quickNav5"></div>
@@ -606,56 +460,71 @@
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // 全局变量
-    let currentPage = 0;
-    const TOTAL_PAGE = 5;
+    // 有效页面ID列表（只保留蛋糕、留言墙、信）
+    const VALID_PAGES = [1, 2, 5];
+    let currentPageId = 1;        // 当前显示的有效页面ID
+    let isAuthenticated = false;   // 是否已验证为本人（控制留言删除按钮显示）
     const PASSWORD = "1880";
-    let isAuthenticated = false;   // 是否已验证为本人（控制删除按钮显示）
 
-    // 渲染五个核心tab的快捷导航
-    function renderQuickNav(currentNum) {
+    // 根据当前页面ID获取索引
+    function getCurrentIndex() {
+        return VALID_PAGES.indexOf(currentPageId);
+    }
+
+    // 渲染三个核心tab的快捷导航 (只显示蛋糕、留言墙、信)
+    function renderQuickNav(activeId) {
         const pagesConfig = [
             { name: "🎂 蛋糕", id: 1 },
             { name: "💬 留言墙", id: 2 },
-            { name: "📅 时光轴", id: 3 },
-            { name: "🎁 彩蛋", id: 4 },
             { name: "💌 信", id: 5 }
         ];
         const navHtml = `
             <div class="quick-nav">
-                ${pagesConfig.map(p => `<button data-page="${p.id}" class="${currentNum === p.id ? 'active' : ''}">${p.name}</button>`).join('')}
+                ${pagesConfig.map(p => `<button data-page="${p.id}" class="${activeId === p.id ? 'active' : ''}">${p.name}</button>`).join('')}
             </div>
         `;
-        // 为每个包含快捷栏的容器填充相同导航
-        for (let i = 1; i <= 5; i++) {
-            const containerId = `quickNav${i === 1 ? '1' : i}`;
-            const container = document.getElementById(containerId);
+        // 为每个存在 .quick-nav 的容器填充相同导航（页面1、2、5都有此容器）
+        const navContainers = document.querySelectorAll('#page1 .quick-nav, #page2 .quick-nav, #page5 .quick-nav');
+        navContainers.forEach(container => {
             if (container) container.innerHTML = navHtml;
-        }
-        // 绑定事件
+        });
+
+        // 绑定点击事件
         document.querySelectorAll('.quick-nav button').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const pageNum = parseInt(btn.dataset.page);
-                if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= 5) {
-                    showPage(pageNum);
+                const targetPage = parseInt(btn.dataset.page);
+                if (VALID_PAGES.includes(targetPage)) {
+                    showPage(targetPage);
                 }
             });
         });
     }
 
-    // 切换主要内部页面（蛋糕/留言墙/时光轴/彩蛋/信）
-    function showPage(n) {
-        if (n < 1 || n > 5) return;
-        // 隐藏所有页面，显示对应页
+    // 切换核心页面（仅允许 1,2,5）
+    function showPage(pageId) {
+        if (!VALID_PAGES.includes(pageId)) return;
+        // 隐藏所有页面
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(`page${n}`).classList.add('active');
-        currentPage = n;
+        document.getElementById(`page${pageId}`).classList.add('active');
+        currentPageId = pageId;
 
+        // 显示翻页按钮区域
         const navButtons = document.getElementById('navButtons');
         navButtons.style.display = 'block';
-        document.getElementById('prevBtn').style.display = (n === 1) ? 'none' : 'inline-block';
+
+        const currentIdx = getCurrentIndex();
+        const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-        if (n === TOTAL_PAGE) {
+
+        // 上一页按钮逻辑
+        if (currentIdx === 0) {
+            prevBtn.style.display = 'none';
+        } else {
+            prevBtn.style.display = 'inline-block';
+        }
+
+        // 下一页按钮逻辑
+        if (currentIdx === VALID_PAGES.length - 1) {
             nextBtn.innerText = "✨ 最后一页 ✨";
             nextBtn.disabled = true;
         } else {
@@ -663,32 +532,38 @@
             nextBtn.disabled = false;
         }
 
-        // 每次进入留言墙刷新数据，以便根据isAuthenticated更新删除按钮
-        if (n === 2) loadCloudMessages();
-        renderQuickNav(n);
+        // 每次进入留言墙时刷新数据（根据 isAuthenticated 显示删除按钮）
+        if (pageId === 2) loadCloudMessages();
+
+        // 刷新快捷导航高亮
+        renderQuickNav(pageId);
     }
 
-    // 密码验证（从身份验证入口）
+    // 上一页
+    function goPrev() {
+        const idx = getCurrentIndex();
+        if (idx > 0) {
+            showPage(VALID_PAGES[idx - 1]);
+        }
+    }
+
+    // 下一页
+    function goNext() {
+        const idx = getCurrentIndex();
+        if (idx < VALID_PAGES.length - 1) {
+            showPage(VALID_PAGES[idx + 1]);
+        }
+    }
+
+    // 本人密码验证（入口）
     function checkVerify() {
         const val = document.getElementById("verifyPwd").value.trim();
         if (val === PASSWORD) {
             isAuthenticated = true;
+            // 验证成功后显示蛋糕页（第一个有效页面）
             showPage(1);
         } else {
             alert("🔐 密码不正确哦！再试试看～");
-        }
-    }
-
-    // 彩蛋页的密码验证，验证成功同样给管理权限并显示秘语
-    function checkPwd() {
-        const val = document.getElementById("pwdInput").value.trim();
-        if (val === PASSWORD) {
-            document.getElementById("secret").style.display = "block";
-            isAuthenticated = true;
-            // 如果当前在留言墙页面，刷新显示删除按钮
-            if (currentPage === 2) loadCloudMessages();
-        } else {
-            alert("❌ 密码错误，小惊喜暂未解锁~");
         }
     }
 
@@ -697,7 +572,7 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('page0').classList.add('active');
         document.getElementById('navButtons').style.display = 'none';
-        currentPage = 0;
+        currentPageId = 1;  // 重置当前记录
     }
 
     function goToVerify() {
@@ -710,7 +585,7 @@
         document.getElementById('friendPage').classList.add('active');
     }
 
-    // ======================== 删除留言功能 ========================
+    // 删除留言（仅本人验证后可用）
     async function deleteMessage(id, cardElement) {
         if (!confirm("确定要删除这条祝福吗？删除后无法恢复。")) return;
         try {
@@ -730,7 +605,7 @@
         }
     }
 
-    // ======================== 加载留言墙（带删除按钮判断） ========================
+    // 加载留言墙（根据 isAuthenticated 显示删除按钮）
     async function loadCloudMessages() {
         const box = document.getElementById("mainMessageWall");
         if (!box) return;
@@ -777,7 +652,7 @@
         }
     }
 
-    // 提交祝福（朋友使用）
+    // 朋友提交祝福
     async function submitMessage() {
         let name = document.getElementById("name").value.trim();
         let content = document.getElementById("content").value.trim();
@@ -796,34 +671,31 @@
             alert("🎉 祝福提交成功！已经永久保存在云端啦 🎉");
             document.getElementById("name").value = "";
             document.getElementById("content").value = "";
-            if (currentPage === 2) loadCloudMessages();
+            // 如果当前在留言墙页面，刷新显示新留言
+            if (currentPageId === 2) loadCloudMessages();
         } catch (err) {
             alert("提交失败，请稍后重试 T_T");
             console.error(err);
         }
     }
 
-    // 翻页（上一页/下一页）
-    document.getElementById('nextBtn')?.addEventListener('click', () => {
-        if (currentPage < TOTAL_PAGE) showPage(currentPage + 1);
-    });
-    document.getElementById('prevBtn')?.addEventListener('click', () => {
-        if (currentPage > 1) showPage(currentPage - 1);
-    });
+    // 绑定上一页/下一页按钮事件
+    document.getElementById('prevBtn')?.addEventListener('click', goPrev);
+    document.getElementById('nextBtn')?.addEventListener('click', goNext);
 
-    // 全局方法挂载
+    // 挂载全局方法
     window.goToHome = goToHome;
     window.goToVerify = goToVerify;
     window.goToFriend = goToFriend;
     window.checkVerify = checkVerify;
-    window.checkPwd = checkPwd;
     window.submitMessage = submitMessage;
     window.deleteMessage = deleteMessage;
     window.loadCloudMessages = loadCloudMessages;
 
-    // 初始渲染导航 (在需要展示的时候会触发)
-    // 确保一开始身份页没有导航条
+    // 初始隐藏翻页按钮（身份选择页不显示）
     document.getElementById('navButtons').style.display = 'none';
+    // 预渲染导航样式（但初始页面还未显示核心页，等验证成功后再显示，届时渲染）
+    // 为了保证首次验证后能正常显示导航，在 showPage 中会调用 renderQuickNav，无需额外操作
 </script>
 </body>
 </html>
